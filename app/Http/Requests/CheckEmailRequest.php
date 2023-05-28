@@ -14,7 +14,7 @@ class CheckEmailRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'emai' => ['required', 'email'],
+			'email' => ['required', 'email'],
 		];
 	}
 }

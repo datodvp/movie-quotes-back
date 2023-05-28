@@ -23,10 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Public routes
 
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('auth.login');
+Route::post('/register', [AuthController::class, 'register'])->middleware('guest')->name('auth.register');
 
-Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])->middleware('guest')->name('verification.verify');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'check'])->middleware('guest')->name('password.email');
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'redirect'])->middleware('guest')->name('password.reset');
@@ -35,5 +35,5 @@ Route::post('/reset-password', [PasswordResetController::class, 'update'])->midd
 // Protected routes
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+	Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('auth.logout');
 });
