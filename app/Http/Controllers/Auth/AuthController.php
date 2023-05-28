@@ -7,13 +7,14 @@ use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
 	use HttpResponses;
 
-	public function login(LoginUserRequest $request)
+	public function login(LoginUserRequest $request): JsonResponse
 	{
 		$request->validated($request->all());
 
@@ -33,7 +34,7 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function register(StoreUserRequest $request)
+	public function register(StoreUserRequest $request): JsonResponse
 	{
 		$request->validated($request->all());
 
@@ -50,7 +51,7 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function logout()
+	public function logout(): JsonResponse
 	{
 		Auth::user()->currentAccessToken()->delete();
 

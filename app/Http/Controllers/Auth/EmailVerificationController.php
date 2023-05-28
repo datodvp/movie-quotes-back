@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EmailVerificationController extends Controller
 {
 	use HttpResponses;
 
-	public function verify($user_id, Request $request)
+	public function verify($user_id, Request $request): JsonResponse
 	{
 		if (!$request->hasValidSignature()) {
 			return  $this->respondUnauthorizedRequest(253);
@@ -23,10 +24,12 @@ class EmailVerificationController extends Controller
 			$user->markEmailAsVerified();
 		}
 
-		return response()->json('successfully verified');
+		return $this->success([
+			'message' => 'Succesfully verified',
+		]);
 	}
 
-	public function resend()
+	public function resend(): JsonResponse
 	{
 		if (auth()->user()->hasVerifiedEmail()) {
 			return $this->error('', 254, 'Email already verified');
