@@ -39,9 +39,9 @@ class AuthController extends Controller
 		$request->validated($request->all());
 
 		$user = User::create([
-			'name'     => $request->name,
-			'email'    => $request->email,
-			'password' => $request->password,
+			'username'     => $request->username,
+			'email'        => $request->email,
+			'password'     => $request->password,
 		]);
 
 		$user->sendEmailVerificationNotification();
