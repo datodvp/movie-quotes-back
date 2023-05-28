@@ -8,6 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -16,17 +17,23 @@ class AuthController extends Controller
 
 	public function login(LoginUserRequest $request): JsonResponse
 	{
-		$request->validated($request->all());
+		$validated = $request->validated();
+		// Check if "login" field is Email or Username
+		$fieldName = filter_var($validated['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+		// Create field property for credentials
+		$validated[$fieldName] = $validated['login'];
 
-		$user = User::where('email', $request->email)->first();
-
-		if (!$user->hasVerifiedEmail()) {
-			return $this->error('', 403, 'Accounts Email must be verified before login');
-		}
-
-		if (!Auth::attempt($request->only('email', 'password'))) {
+		if (!Auth::attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
 			return $this->error('', 401, 'Credentials do not match');
 		}
+
+		if (!Auth::user()->hasVerifiedEmail()) {
+			Auth::logout();
+
+			return $this->error('', 403, 'Accounts must be verified before login');
+		}
+
+		$user = Auth::user();
 
 		return $this->success([
 			'user'  => $user,
