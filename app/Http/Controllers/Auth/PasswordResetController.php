@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CheckEmailRequest;
 use App\Traits\HttpResponses;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -14,9 +15,9 @@ class PasswordResetController extends Controller
 {
 	use HttpResponses;
 
-	public function check(Request $request): JsonResponse
+	public function check(CheckEmailRequest $request): JsonResponse
 	{
-		$request->validate(['email' => 'required|email']);
+		$request->validated();
 
 		$status = Password::sendResetLink(
 			$request->only('email')
