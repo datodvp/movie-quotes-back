@@ -28,15 +28,4 @@ class EmailVerificationController extends Controller
 			'message' => 'Succesfully verified',
 		]);
 	}
-
-	public function resend(): JsonResponse
-	{
-		if (auth()->user()->hasVerifiedEmail()) {
-			return $this->error('', 254, 'Email already verified');
-		}
-
-		auth()->user()->sendEmailVerificationNotification();
-
-		return $this->success('', 200, 'Verification link sent on Email');
-	}
 }
