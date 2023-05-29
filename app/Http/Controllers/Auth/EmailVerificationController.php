@@ -25,7 +25,7 @@ class EmailVerificationController extends Controller
 		}
 
 		return $this->success([
-			'message' => 'Succesfully verified',
+			'message' => __('auth.verified'),
 		]);
 	}
 }

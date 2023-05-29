@@ -24,13 +24,13 @@ class AuthController extends Controller
 		$validated[$fieldName] = $validated['login'];
 
 		if (!Auth::attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
-			return $this->error('', 401, 'Credentials do not match');
+			return $this->error('', 401, __('auth.failed'));
 		}
 
 		if (!Auth::user()->hasVerifiedEmail()) {
 			Auth::logout();
 
-			return $this->error('', 403, 'Accounts must be verified before login');
+			return $this->error('', 403, __('auth.not_verified'));
 		}
 
 		$user = Auth::user();
@@ -54,7 +54,8 @@ class AuthController extends Controller
 		$user->sendEmailVerificationNotification();
 
 		return $this->success([
-			'user'  => $user,
+			'user'    => $user,
+			'message' => __('auth.register'),
 		]);
 	}
 
@@ -63,7 +64,7 @@ class AuthController extends Controller
 		Auth::user()->currentAccessToken()->delete();
 
 		return $this->success([
-			'message' => 'You have been successfully logged out',
+			'message' => __('auth.logout'),
 		]);
 	}
 }

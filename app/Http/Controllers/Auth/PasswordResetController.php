@@ -24,10 +24,10 @@ class PasswordResetController extends Controller
 		);
 
 		return $status === Password::RESET_LINK_SENT ? $this->success([
-			'message' => 'Reset link sent succesfully',
+			'message' => __('auth.reset_link_sent'),
 			'status'  => $status,
 		]) : $this->error([
-			'message' => 'Unfortunately reset link could not be sent',
+			'message' => __('auth.reset_link_not_sent'),
 			'status'  => $status,
 		], 401);
 	}
@@ -63,10 +63,10 @@ class PasswordResetController extends Controller
 
 		return $status === Password::PASSWORD_RESET
 					? $this->success([
-						'message' => 'Password has been updated',
+						'message' => __('auth.password_updated'),
 						'status'  => $status,
 					]) : $this->error([
-						'message' => 'Could not update a password sorry...',
+						'message' => __('auth.password_not_updated'),
 						'status'  => $status,
 					], 401);
 	}
