@@ -35,5 +35,5 @@ Route::post('/reset-password', [PasswordResetController::class, 'update'])->midd
 // Protected routes
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('auth.logout');
+	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

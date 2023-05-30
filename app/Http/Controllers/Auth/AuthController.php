@@ -37,7 +37,6 @@ class AuthController extends Controller
 
 		return $this->success([
 			'user'  => $user,
-			'token' => $user->createToken('Login Token of ' . $user->email)->plainTextToken,
 		]);
 	}
 
@@ -61,7 +60,7 @@ class AuthController extends Controller
 
 	public function logout(): JsonResponse
 	{
-		Auth::user()->currentAccessToken()->delete();
+		Auth::guard('web')->logout();
 
 		return $this->success([
 			'message' => __('auth.logout'),
