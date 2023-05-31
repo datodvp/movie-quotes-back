@@ -5,21 +5,21 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\HttpResponses;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Symfony\Component\HttpFoundation\Response;
 
 class GoogleAuthController extends Controller
 {
 	use HttpResponses;
 
-	public function redirect(): RedirectResponse
+	public function redirect(): Response
 	{
 		return Socialite::driver('google')->redirect();
 	}
 
-	public function callback(): JsonResponse
+	public function callback(): UrlGenerator|string
 	{
 		$googleUser = Socialite::driver('google')->user();
 
@@ -32,9 +32,6 @@ class GoogleAuthController extends Controller
 
 		Auth::login($user);
 
-		return $this->success([
-			'user'  => $user,
-			'token' => $user->createToken('Google Login Token of ' . $user->email)->plainTextToken,
-		], 201, 'User has been logged in successfully');
+		return redirect(env('SPA_URL'));
 	}
 }

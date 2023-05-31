@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +23,7 @@ class RedirectIfAuthenticated
 				if ($request->expectsJson()) {
 					return response()->json(['error' => 'Already authenticated.'], 200);
 				}
-				return redirect(RouteServiceProvider::HOME);
+				return redirect(env('SPA_URL'));
 			}
 		}
 
