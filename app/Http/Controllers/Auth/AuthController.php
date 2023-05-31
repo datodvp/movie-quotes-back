@@ -8,6 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,9 +59,13 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function logout(): JsonResponse
+	public function logout(Request $request): JsonResponse
 	{
 		Auth::guard('web')->logout();
+
+		$request->session()->invalidate();
+
+		$request->session()->regenerateToken();
 
 		return $this->success([
 			'message' => __('auth.logout'),
