@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\HttpResponses;
-use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ class GoogleAuthController extends Controller
 		return Socialite::driver('google')->redirect();
 	}
 
-	public function callback(): UrlGenerator|string
+	public function callback(): RedirectResponse
 	{
 		$googleUser = Socialite::driver('google')->user();
 
@@ -32,6 +32,6 @@ class GoogleAuthController extends Controller
 
 		Auth::login($user);
 
-		return redirect(env('SPA_URL'));
+		return redirect()->to(env('SPA_URL'));
 	}
 }
