@@ -32,12 +32,13 @@ class PasswordResetController extends Controller
 		], 401);
 	}
 
-	public function redirect($token): JsonResponse
+	public function redirect($token, Request $request)
 	{
-		return $this->success([
-			'message' => 'Succesful redirect to password change page',
-			'token'   => $token,
-		]);
+		$email = $request->query('email');
+
+		$resetPasswordUrl = env('SPA_URL') . '/reset-password' . '?token=' . $token . '&email=' . $email;
+
+		return redirect()->to($resetPasswordUrl);
 	}
 
 	public function update(Request $request): JsonResponse
@@ -45,7 +46,7 @@ class PasswordResetController extends Controller
 		$request->validate([
 			'token'    => 'required',
 			'email'    => 'required|email',
-			'password' => 'required|min:8|confirmed',
+			'password' => 'required|min:8|max:15|confirmed',
 		]);
 
 		$status = Password::reset(
