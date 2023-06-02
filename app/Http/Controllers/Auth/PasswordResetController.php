@@ -8,6 +8,7 @@ use App\Traits\HttpResponses;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -32,7 +33,7 @@ class PasswordResetController extends Controller
 		], 401);
 	}
 
-	public function redirect($token, Request $request)
+	public function redirect($token, Request $request): RedirectResponse
 	{
 		$email = $request->query('email');
 
