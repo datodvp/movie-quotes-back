@@ -40,5 +40,6 @@ Route::middleware(['guest:sanctum'])->group(function () {
 // Protected routes
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::get('/check-authentication', [AuthController::class, 'checkAuthentication']);
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

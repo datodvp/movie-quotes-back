@@ -71,4 +71,17 @@ class AuthController extends Controller
 			'message' => __('auth.logout'),
 		]);
 	}
+
+	public function checkAuthentication(Request $request): JsonResponse
+	{
+		if ($request->user()) {
+			return $this->success([
+				'message' => 'Authenticated',
+			]);
+		} else {
+			return $this->error([
+				'message' => 'Unauthenticated',
+			], 401);
+		}
+	}
 }
