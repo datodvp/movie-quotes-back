@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Mail\VerifyEmail;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -51,7 +53,7 @@ class AuthController extends Controller
 			'password'     => $request->password,
 		]);
 
-		$user->sendEmailVerificationNotification();
+		Mail::to($user)->send(new VerifyEmail($user));
 
 		return $this->success([
 			'user'    => $user,
