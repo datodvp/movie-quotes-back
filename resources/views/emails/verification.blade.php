@@ -13,7 +13,7 @@
         style="display: block; width: 128px; max-width: 392px; background: #E31221; border-radius: 4px; text-align: center; line-height: 38px; text-decoration: none; color: #ffffff;">Verify
         account</a>
 
-    <p>If clicking doesn't work, you can try copying and pasting it to your browser:</p>
+    <p style="margin-top: 40px; ">If clicking doesn't work, you can try copying and pasting it to your browser:</p>
 
     <p style="overflow-wrap: break-word;">
         {{ $url }}
