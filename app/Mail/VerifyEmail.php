@@ -17,12 +17,15 @@ class VerifyEmail extends Mailable
 
 	protected string $url;
 
+	protected string $username;
+
 	/**
 	 * Create a new message instance.
 	 */
 	public function __construct(User $user)
 	{
 		// Generate verification URL
+		$this->username = $user->username;
 		$this->url = URL::temporarySignedRoute(
 			'verification.verify',
 			now()->addMinutes(60),
@@ -52,7 +55,8 @@ class VerifyEmail extends Mailable
 		return new Content(
 			markdown: 'emails.verification',
 			with: [
-				'url' => $this->url,
+				'url'      => $this->url,
+				'username' => $this->username,
 			]
 		);
 	}

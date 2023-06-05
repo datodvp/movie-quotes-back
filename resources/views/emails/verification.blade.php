@@ -5,7 +5,7 @@
     </div>
 
     <div style="margin:auto; left:0;right:0; width:fit-content;">MOVIE QUOTES</div>
-    <p style="margin-top: 30px">Hola ekaterine</p>
+    <p style="margin-top: 30px">Hola {{ $username }}</p>
 
     <p style="margin-top: 30px">Thanks for joining Movie quotes! We really appreciate it. Please click the button below
         to verify your account:</p>
@@ -16,7 +16,7 @@
     <p>If clicking doesn't work, you can try copying and pasting it to your browser:</p>
 
     <p style="overflow-wrap: break-word;">
-        https://moviequotes/verify?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdHYiOjIsImp0aSI6ImRkNTVkMTM1LTFhMGEtNDBjNi04NDQ5LThmZjdkZGFlNDc3MyIsImVtYWlsVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE2MDE2NzIxMIyYjk2NDNhNjdjNjU1NmQ5MSJ9.ok1qXOM-RY9_x2_xKjDj2aK6NG9w9xAMcDpchUnbn4c
+        {{ $url }}
     </p>
 
     <p>If you have any problems, please contact us: support@moviequotes.ge</p>
