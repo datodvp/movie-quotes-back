@@ -26,13 +26,13 @@ class AuthController extends Controller
 		$validated[$fieldName] = $validated['login'];
 
 		if (!auth()->attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
-			return $this->error('', 401, __('auth.failed'));
+			return $this->error('', 401, __('messages.authorization_failed'));
 		}
 
 		if (!auth()->user()->hasVerifiedEmail()) {
 			auth()->logout();
 
-			return $this->error('', 403, __('auth.not_verified'));
+			return $this->error('', 403, __('messages.not_verified'));
 		}
 
 		$user = auth()->user();
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
 		return $this->success([
 			'user'    => $user,
-			'message' => __('auth.register'),
+			'message' => __('messages.registered_succesfully'),
 		]);
 	}
 
@@ -65,7 +65,7 @@ class AuthController extends Controller
 		$request->session()->regenerateToken();
 
 		return $this->success([
-			'message' => __('auth.logout'),
+			'message' => __('messages.logout_succesfully'),
 		]);
 	}
 }
