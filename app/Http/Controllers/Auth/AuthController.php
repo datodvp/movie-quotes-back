@@ -11,7 +11,6 @@ use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -26,17 +25,17 @@ class AuthController extends Controller
 		// Create field property for credentials
 		$validated[$fieldName] = $validated['login'];
 
-		if (!Auth::attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
+		if (!auth()->attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
 			return $this->error('', 401, __('auth.failed'));
 		}
 
-		if (!Auth::user()->hasVerifiedEmail()) {
-			Auth::logout();
+		if (!auth()->user()->hasVerifiedEmail()) {
+			auth()->logout();
 
 			return $this->error('', 403, __('auth.not_verified'));
 		}
 
-		$user = Auth::user();
+		$user = auth()->user();
 
 		return $this->success([
 			'user'  => $user,
@@ -59,7 +58,7 @@ class AuthController extends Controller
 
 	public function logout(Request $request): JsonResponse
 	{
-		Auth::guard('web')->logout();
+		auth()->guard('web')->logout();
 
 		$request->session()->invalidate();
 

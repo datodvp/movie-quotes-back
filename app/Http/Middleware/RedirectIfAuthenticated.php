@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
@@ -19,7 +18,7 @@ class RedirectIfAuthenticated
 		$guards = empty($guards) ? [null] : $guards;
 
 		foreach ($guards as $guard) {
-			if (Auth::guard($guard)->check()) {
+			if (auth()->guard($guard)->check()) {
 				if ($request->expectsJson()) {
 					return response()->json(['error' => 'Already authenticated.'], 200);
 				}

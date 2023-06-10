@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,7 +29,7 @@ class GoogleAuthController extends Controller
 			'email'     => $googleUser->email,
 		]);
 
-		Auth::login($user);
+		auth()->login($user);
 
 		$redirectUrl = env('SPA_URL') . '?token=' . $googleUser->token;
 
