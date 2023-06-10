@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\PasswordResetRequest;
+use App\Mail\PasswordReset as MailPasswordReset;
+use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -12,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
 {
@@ -19,19 +22,23 @@ class PasswordResetController extends Controller
 
 	public function check(CheckEmailRequest $request): JsonResponse
 	{
-		$request->validated();
+		$validated = $request->validated();
 
-		$status = Password::sendResetLink(
-			$request->only('email')
-		);
+		$user = User::where('email', $validated)->first();
 
-		return $status === Password::RESET_LINK_SENT ? $this->success([
+		if (!$user) {
+			return $this->error([
+				'message' => __('auth.reset_link_not_sent'),
+			], 401);
+		}
+
+		$token = app('auth.password.broker')->createToken($user);
+
+		Mail::to($validated)->send(new MailPasswordReset($user, $token));
+
+		return $this->success([
 			'message' => __('auth.reset_link_sent'),
-			'status'  => $status,
-		]) : $this->error([
-			'message' => __('auth.reset_link_not_sent'),
-			'status'  => $status,
-		], 401);
+		]);
 	}
 
 	public function redirect($token, Request $request): RedirectResponse
