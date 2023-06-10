@@ -24,7 +24,7 @@ class EmailVerificationController extends Controller
 			$user->markEmailAsVerified();
 		}
 
-		$verifiedUrl = env('SPA_URL') . '/mail-verified';
+		$verifiedUrl = env('FRONTEND_URL') . '/mail-verified';
 
 		return redirect()->to($verifiedUrl);
 	}

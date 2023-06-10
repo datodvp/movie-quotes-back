@@ -22,7 +22,7 @@ class RedirectIfAuthenticated
 				if ($request->expectsJson()) {
 					return response()->json(['error' => 'Already authenticated.'], 200);
 				}
-				return redirect(env('SPA_URL'));
+				return redirect(env('FRONTEND_URL'));
 			}
 		}
 

@@ -37,7 +37,7 @@ class PasswordResetController extends Controller
 	{
 		$email = $request->query('email');
 
-		$resetPasswordUrl = env('SPA_URL') . '/reset-password' . '?token=' . $token . '&email=' . $email;
+		$resetPasswordUrl = env('FRONTEND_URL') . '/reset-password' . '?token=' . $token . '&email=' . $email;
 
 		return redirect()->to($resetPasswordUrl);
 	}
