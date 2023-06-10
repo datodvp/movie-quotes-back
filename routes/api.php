@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +16,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-	return $request->user();
-});
 
 // Public routes
 Route::middleware(['guest:sanctum'])->group(function () {
@@ -40,6 +35,5 @@ Route::middleware(['guest:sanctum'])->group(function () {
 // Protected routes
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-	Route::get('/check-authentication', [AuthController::class, 'checkAuthentication']);
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

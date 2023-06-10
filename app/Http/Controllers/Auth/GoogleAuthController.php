@@ -32,6 +32,8 @@ class GoogleAuthController extends Controller
 
 		Auth::login($user);
 
-		return redirect()->to(env('SPA_URL'));
+		$redirectUrl = env('SPA_URL') . '?token=' . $googleUser->token;
+
+		return redirect()->to($redirectUrl);
 	}
 }

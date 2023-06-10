@@ -45,13 +45,9 @@ class AuthController extends Controller
 
 	public function register(StoreUserRequest $request): JsonResponse
 	{
-		$request->validated($request->all());
+		$validated = $request->validated();
 
-		$user = User::create([
-			'username'     => $request->username,
-			'email'        => $request->email,
-			'password'     => $request->password,
-		]);
+		$user = User::create($validated);
 
 		Mail::to($user)->send(new VerifyEmail($user));
 
@@ -72,18 +68,5 @@ class AuthController extends Controller
 		return $this->success([
 			'message' => __('auth.logout'),
 		]);
-	}
-
-	public function checkAuthentication(Request $request): JsonResponse
-	{
-		if ($request->user()) {
-			return $this->success([
-				'message' => 'Authenticated',
-			]);
-		} else {
-			return $this->error([
-				'message' => 'Unauthenticated',
-			], 401);
-		}
 	}
 }
