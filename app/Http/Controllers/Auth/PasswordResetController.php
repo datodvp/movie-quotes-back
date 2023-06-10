@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CheckEmailRequest;
+use App\Http\Requests\PasswordResetRequest;
 use App\Traits\HttpResponses;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -42,16 +43,12 @@ class PasswordResetController extends Controller
 		return redirect()->to($resetPasswordUrl);
 	}
 
-	public function update(Request $request): JsonResponse
+	public function update(PasswordResetRequest $request): JsonResponse
 	{
-		$request->validate([
-			'token'    => 'required',
-			'email'    => 'required|email',
-			'password' => 'required|min:8|max:15|confirmed',
-		]);
+		$validated = $request->validated();
 
 		$status = Password::reset(
-			$request->only('email', 'password', 'password_confirmation', 'token'),
+			$validated,
 			function ($user, $password) {
 				$user->forceFill([
 					'password' => Hash::make($password),
