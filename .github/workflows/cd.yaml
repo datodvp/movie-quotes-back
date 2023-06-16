@@ -12,11 +12,11 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
       - name: "deploy to server"
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
-            cd apps
-            cd nextjs-folder-structure-example
-            git pull
-            npm ci
-            npm run build
-        EOF
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << EOF
+              cd apps
+              cd nextjs-folder-structure-example
+              git pull
+              npm ci
+              npm run build
+          EOF
