@@ -1,7 +1,7 @@
 name: "push to server"
 on:
   push:
-    branches: -main
+    branches: ["authentication-and-password-reset"]
 jobs:
   cd:
     runs-on: ubuntu-latest
