@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// 123
+
 // Public routes
 Route::middleware(['guest:sanctum'])->group(function () {
 	Route::get('/auth/redirect', [GoogleAuthController::class, 'redirect']);
