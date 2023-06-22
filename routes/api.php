@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,4 +37,6 @@ Route::middleware(['guest:sanctum'])->group(function () {
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+	Route::get('/user-data', [UserController::class, 'userData'])->name('auth.userData');
 });
