@@ -39,4 +39,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 	Route::get('/user-data', [UserController::class, 'userData'])->name('auth.userData');
+	Route::post('/change-user-credentials', [UserController::class, 'changeUserCredentials'])->name('auth.changeUserCredentials');
 });
