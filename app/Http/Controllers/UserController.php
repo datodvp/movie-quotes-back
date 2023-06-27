@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Mail\VerifyEmail;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -23,20 +25,33 @@ class UserController extends Controller
 	{
 		$validated = $request->validated();
 
+		$user = auth()->user();
+
+		if (isset($validated['email'])) {
+			$user->update([
+				'email'             => $validated['email'],
+			]);
+			$user->email_verified_at = null;
+			$user->save();
+
+			Mail::to($user)->send(new VerifyEmail($user));
+		}
+
 		if (isset($validated['username'])) {
-			auth()->user()->update([
-				'username' => $validated['username'],
+			$user->update([
+				'username'          => $validated['username'],
 			]);
 		}
 
 		if (isset($validated['password'])) {
-			auth()->user()->update([
+			$user->update([
 				'password' => Hash::make($validated['password']),
 			]);
 		}
 
 		return $this->success([
-			'message' => __('auth.password_updated'),
+			'message' => __('messages.profile_updated'),
+			'user'    => $user,
 		]);
 	}
 }

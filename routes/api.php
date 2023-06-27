@@ -19,14 +19,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public routes
+
+Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+
 Route::middleware(['guest:sanctum'])->group(function () {
 	Route::get('/auth/redirect', [GoogleAuthController::class, 'redirect']);
 	Route::get('/auth/callback', [GoogleAuthController::class, 'callback']);
 
 	Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('auth.login');
 	Route::post('/register', [AuthController::class, 'register'])->middleware('guest')->name('auth.register');
-
-	Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])->middleware('guest')->name('verification.verify');
 
 	Route::post('/forgot-password', [PasswordResetController::class, 'check'])->middleware('guest')->name('password.email');
 	Route::get('/reset-password/{token}', [PasswordResetController::class, 'redirect'])->middleware('guest')->name('password.reset');

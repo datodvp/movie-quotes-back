@@ -10,6 +10,6 @@ return [
 	'verified'              => 'You have verified your account succesfully.',
 	'reset_link_sent'       => 'Password reset link sent succesfully to mail.',
 	'reset_link_not_sent'   => 'Unfortunately we were not able to send password reset link.',
-	'password_updated'      => 'Password has been updated.',
-	'password_not_updated'  => 'Could not update a password sorry...',
+	'profile_updated'       => 'Profile has been updated.',
+	'profile_not_updated'   => 'Could not update a profile sorry...',
 ];

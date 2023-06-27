@@ -14,6 +14,7 @@ class ChangePasswordRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
+			'email'        => ['sometimes', 'required', 'string', 'max:255', 'email', 'unique:users,email'],
 			'username'     => ['sometimes', 'string', 'min:3', 'max:15', 'regex:/^[a-z0-9]*$/', 'unique:users,username'],
 			'password'     => ['sometimes', 'min:8', 'max:15', 'confirmed', 'regex:/^[a-z0-9]*$/'],
 		];
