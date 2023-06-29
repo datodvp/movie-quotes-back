@@ -18,7 +18,7 @@ class MovieController extends Controller
 	 */
 	public function index()
 	{
-		$movies = Movie::all();
+		$movies = Movie::where('user_id', auth()->user()->id)->get();
 
 		// this map method translates movies with spatie
 		$translatedMovies = $movies->map(function ($movie) {
@@ -39,6 +39,8 @@ class MovieController extends Controller
 	public function store(StoreMovieRequest $request)
 	{
 		$validated = $request->validated();
+
+		$validated['user_id'] = auth()->user()->id;
 
 		$movie = Movie::create($validated);
 
