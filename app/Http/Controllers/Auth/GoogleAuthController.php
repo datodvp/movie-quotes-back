@@ -29,7 +29,6 @@ class GoogleAuthController extends Controller
 		} else {
 			$user = User::create([
 				'google_id' => $googleUser->id,
-			], [
 				'username'  => $googleUser->name,
 				'email'     => $googleUser->email,
 			]);
