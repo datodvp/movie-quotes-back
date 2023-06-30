@@ -25,6 +25,7 @@ class MovieController extends Controller
 			return [
 				'name'        => $movie->name,
 				'year'        => $movie->year,
+				'image'       => $movie->image,
 			];
 		});
 
@@ -41,17 +42,18 @@ class MovieController extends Controller
 		$validated = $request->validated();
 
 		$validated['user_id'] = auth()->user()->id;
+		$validated['genres'] = json_decode($validated['genres'], true);
+		$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
 
 		$movie = Movie::create($validated);
 
 		$translatedMovie = [
 			'name'        => $movie->name,
 			'year'        => $movie->year,
-			'director'    => $movie->director,
-			'description' => $movie->description,
+			'image'       => $movie->image,
 		];
 
-		// add genres to the movie
+		// attach genres to movie
 		foreach ($validated['genres'] as $genre) {
 			$movie->genres()->attach($genre['id']);
 		}

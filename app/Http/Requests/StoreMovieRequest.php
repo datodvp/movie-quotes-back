@@ -22,6 +22,7 @@ class StoreMovieRequest extends FormRequest
 			'description.en' => ['required', 'min:3'],
 			'description.ka' => ['required', 'min:3'],
 			'genres'         => ['required'],
+			'image'          => ['required', 'image'],
 		];
 	}
 }

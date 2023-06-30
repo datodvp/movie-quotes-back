@@ -18,6 +18,7 @@ return new class extends Migration {
 			$table->integer('year')->nullable();
 			$table->json('director')->nullable();
 			$table->json('description')->nullable();
+			$table->string('image')->nullable();
 			$table->timestamps();
 		});
 	}
