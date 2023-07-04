@@ -20,17 +20,8 @@ class MovieController extends Controller
 	{
 		$movies = Movie::where('user_id', auth()->user()->id)->get();
 
-		// this map method translates movies with spatie
-		$translatedMovies = $movies->map(function ($movie) {
-			return [
-				'name'        => $movie->name,
-				'year'        => $movie->year,
-				'image'       => $movie->image,
-			];
-		});
-
 		return $this->success([
-			'movies' => $translatedMovies,
+			'movies' => $movies,
 		]);
 	}
 
@@ -47,12 +38,6 @@ class MovieController extends Controller
 
 		$movie = Movie::create($validated);
 
-		$translatedMovie = [
-			'name'        => $movie->name,
-			'year'        => $movie->year,
-			'image'       => $movie->image,
-		];
-
 		// attach genres to movie
 		foreach ($validated['genres'] as $genre) {
 			$movie->genres()->attach($genre['id']);
@@ -60,7 +45,16 @@ class MovieController extends Controller
 
 		return response()->json([
 			'message' => 'movie added succesfully',
-			'movie'   => $translatedMovie,
+			'movie'   => $movie,
+		]);
+	}
+
+	public function getAllMovies(): JsonResponse
+	{
+		$movies = Movie::all();
+
+		return $this->success([
+			'movies' => $movies,
 		]);
 	}
 
@@ -96,15 +90,8 @@ class MovieController extends Controller
 	{
 		$genres = Genre::all();
 
-		$translatedGenres = $genres->map(function ($genre) {
-			return [
-				'id'   => $genre->id,
-				'name' => $genre->name,
-			];
-		});
-
 		return $this->success([
-			'genres' => $translatedGenres,
+			'genres' => $genres,
 		]);
 	}
 }

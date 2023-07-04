@@ -4,7 +4,9 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +45,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('/user-data', [UserController::class, 'userData'])->name('auth.userData');
 	Route::post('/change-user-credentials', [UserController::class, 'changeUserCredentials'])->name('auth.changeUserCredentials');
 
-	Route::get('/movies', [MovieController::class, 'index'])->name('movies.list');
+	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 	Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
 	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 	Route::get('/movie-genres', [MovieController::class, 'genres'])->name('movies.genres');
+	Route::get('/movies-list', [MovieController::class, 'getAllMovies'])->name('movies.list');
+
+	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.list');
+	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+
+	Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 });
