@@ -19,10 +19,10 @@ class CommentController extends Controller
 
 		$comment = Comment::create($validated);
 
-		$comment->load('user');
+		$comment->load('quote.user', 'quote.comments.user', 'quote.movie');
 
 		return $this->success([
-			'comment' => $comment,
+			'newComment' => $comment,
 		]);
 	}
 }
