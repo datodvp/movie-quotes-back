@@ -12,7 +12,7 @@ class QuoteController extends Controller
 
 	public function index()
 	{
-		$quotes = Quote::with(['user', 'movie',  'comments.user'])->get();
+		$quotes = Quote::with(['user', 'movie',  'comments.user'])->orderByDesc('created_at')->get();
 
 		return $this->success([
 			'quotes' => $quotes,
@@ -28,7 +28,9 @@ class QuoteController extends Controller
 
 		$quote = Quote::create($validated);
 
-		return response()->json([
+		$quote->load('user', 'movie', 'comments.user');
+
+		return $this->success([
 			'message' => 'movie added succesfully',
 			'quote'   => $quote,
 		]);
