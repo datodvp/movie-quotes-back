@@ -37,6 +37,12 @@ class UserController extends Controller
 			Mail::to($user)->send(new VerifyEmail($user));
 		}
 
+		if (isset($validated['image'])) {
+			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+			$user->image = $validated['image'];
+			$user->save();
+		}
+
 		if (isset($validated['username'])) {
 			$user->update([
 				'username'          => $validated['username'],
