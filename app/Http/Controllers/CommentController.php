@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
+use App\Models\Quote;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 
@@ -17,12 +18,13 @@ class CommentController extends Controller
 
 		$validated['user_id'] = auth()->user()->id;
 
-		$comment = Comment::create($validated);
+		Comment::create($validated);
 
-		$comment->load('quote.user', 'quote.comments.user', 'quote.movie');
+		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
 		return $this->success([
-			'newComment' => $comment,
+			'message'      => 'comment added',
+			'updatedQuote' => $updatedQuote,
 		]);
 	}
 }
