@@ -48,7 +48,7 @@ class AuthController extends Controller
 
 		$user = User::create($validated);
 
-		Mail::to($user)->send(new VerifyEmail($user));
+		Mail::to($user)->queue(new VerifyEmail($user));
 
 		return $this->success([
 			'user'    => $user,
