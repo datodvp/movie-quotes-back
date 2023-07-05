@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuoteLikeAction;
 use App\Http\Requests\StoreQuoteLikeRequest;
 use App\Http\Requests\StoreQuoteRequest;
 use App\Models\Quote;
@@ -41,10 +42,17 @@ class QuoteController extends Controller
 	{
 		$validated = $request->validated();
 
-		auth()->user()->likedQuotes()->attach($validated);
+		$user = auth()->user();
+
+		$user->likedQuotes()->attach($validated);
+
+		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+
+		QuoteLikeAction::dispatch($updatedQuote);
 
 		return $this->success([
-			'message' => 'like added',
+			'message'      => 'like added',
+			'updatedQuote' => $updatedQuote,
 		]);
 	}
 
@@ -52,9 +60,17 @@ class QuoteController extends Controller
 	{
 		$validated = $request->validated();
 
-		auth()->user()->likedQuotes()->detach($validated);
+		$user = auth()->user();
+
+		$user->likedQuotes()->detach($validated);
+
+		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+
+		QuoteLikeAction::dispatch($updatedQuote);
 
 		return $this->success([
+			'message'      => 'quote unliked',
+			'updatedQuote' => $updatedQuote,
 		]);
 	}
 }
