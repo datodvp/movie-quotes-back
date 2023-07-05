@@ -4,7 +4,7 @@ namespace App\Broadcasting;
 
 use App\Models\User;
 
-class LikeChannel
+class CommentChannel
 {
 	/**
 	 * Create a new channel instance.

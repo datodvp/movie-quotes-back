@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuoteCommented;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
 use App\Models\Quote;
@@ -21,6 +22,8 @@ class CommentController extends Controller
 		Comment::create($validated);
 
 		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+
+		QuoteCommented::dispatch($updatedQuote);
 
 		return $this->success([
 			'message'      => 'comment added',
