@@ -21,6 +21,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPasswordC
 	 *
 	 * @var array<int, string>
 	 */
+	public function likedQuotes()
+	{
+		return $this->belongsToMany(Quote::class, 'quote_user', 'user_id', 'quote_id');
+	}
+
 	protected $fillable = [
 		'username',
 		'email',

@@ -28,4 +28,9 @@ class Quote extends Model
 	{
 		return $this->belongsTo(Movie::class);
 	}
+
+	public function likes()
+	{
+		return $this->belongsToMany(User::class, 'quote_user', 'quote_id', 'user_id');
+	}
 }
