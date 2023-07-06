@@ -19,15 +19,23 @@ class CommentController extends Controller
 
 		$validated['user_id'] = auth()->user()->id;
 
-		Comment::create($validated);
+		$comment = Comment::create($validated);
 
-		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+		// if commenter himself is quote author DONT notify
+		if ($comment->user->id !== $comment->quote->user->id) {
+			$comment->notifications()->create([
+				'user_id' => $comment->quote->user->id,
+				'text'    => 'Commented to your movie quote',
+			]);
+		}
 
-		QuoteCommented::dispatch($updatedQuote);
+		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+
+		QuoteCommented::dispatch($quote);
 
 		return $this->success([
 			'message'      => 'comment added',
-			'updatedQuote' => $updatedQuote,
+			'updatedQuote' => $quote,
 		]);
 	}
 }

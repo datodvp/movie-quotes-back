@@ -46,13 +46,21 @@ class QuoteController extends Controller
 
 		$user->likedQuotes()->attach($validated);
 
-		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
-		QuoteLikeAction::dispatch($updatedQuote);
+		// if user liked his own quote dont notify
+		if ($user->id !== $quote->user->id) {
+			$quote->notifications()->create([
+				'user_id' => $quote->user->id,
+				'text'    => 'Reacted to your quote',
+			]);
+		}
+
+		QuoteLikeAction::dispatch($quote);
 
 		return $this->success([
 			'message'      => 'like added',
-			'updatedQuote' => $updatedQuote,
+			'updatedQuote' => $quote,
 		]);
 	}
 
@@ -64,13 +72,15 @@ class QuoteController extends Controller
 
 		$user->likedQuotes()->detach($validated);
 
-		$updatedQuote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
+		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
-		QuoteLikeAction::dispatch($updatedQuote);
+		$quote->notifications()->delete();
+
+		QuoteLikeAction::dispatch($quote);
 
 		return $this->success([
 			'message'      => 'quote unliked',
-			'updatedQuote' => $updatedQuote,
+			'updatedQuote' => $quote,
 		]);
 	}
 }
