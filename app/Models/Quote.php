@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Translatable\HasTranslations;
 
 class Quote extends Model
@@ -33,10 +32,5 @@ class Quote extends Model
 	public function likes()
 	{
 		return $this->belongsToMany(User::class, 'quote_user', 'quote_id', 'user_id');
-	}
-
-	public function notifications(): MorphMany
-	{
-		return $this->morphMany(Notification::class, 'notifiable');
 	}
 }

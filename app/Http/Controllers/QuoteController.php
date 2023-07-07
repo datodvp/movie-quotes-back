@@ -50,9 +50,10 @@ class QuoteController extends Controller
 
 		// if user liked his own quote dont notify
 		if ($user->id !== $quote->user->id) {
-			$quote->notifications()->create([
-				'user_id' => $quote->user->id,
-				'text'    => 'Reacted to your quote',
+			$user->likessNotifiable()->create([
+				'user_id'  => $quote->user->id,
+				'username' => $user->username,
+				'text'     => 'Reacted to your quote',
 			]);
 		}
 
@@ -74,7 +75,7 @@ class QuoteController extends Controller
 
 		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
-		$quote->notifications()->delete();
+		$user->likessNotifiable()->delete();
 
 		QuoteLikeAction::dispatch($quote);
 
