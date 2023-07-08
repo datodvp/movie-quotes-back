@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationAdded;
 use App\Events\QuoteCommented;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
@@ -21,9 +22,11 @@ class CommentController extends Controller
 
 		$comment = Comment::create($validated);
 
+		$notification = [];
+
 		// if commenter himself is quote author DONT notify
 		if ($comment->user->id !== $comment->quote->user->id) {
-			$comment->notifications()->create([
+			$notification = $comment->notifications()->create([
 				'user_id'   => $comment->quote->user->id,
 				'username'  => $comment->user->username,
 				'text'      => 'Commented to your movie quote',
@@ -34,6 +37,7 @@ class CommentController extends Controller
 		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
 		QuoteCommented::dispatch($quote);
+		NotificationAdded::dispatch($notification->load('notifiable.user'));
 
 		return $this->success([
 			'message'      => 'comment added',

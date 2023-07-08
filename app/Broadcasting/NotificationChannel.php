@@ -2,9 +2,10 @@
 
 namespace App\Broadcasting;
 
+use App\Models\Notification;
 use App\Models\User;
 
-class CommentChannel
+class NotificationChannel
 {
 	/**
 	 * Create a new channel instance.
@@ -16,8 +17,8 @@ class CommentChannel
 	/**
 	 * Authenticate the user's access to the channel.
 	 */
-	public function join(User $user): array|bool
+	public function join(User $user, Notification $notification): array|bool
 	{
-		return true;
+		return false;
 	}
 }

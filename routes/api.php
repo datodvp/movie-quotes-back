@@ -9,6 +9,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -62,3 +63,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.list');
 	Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 });
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
