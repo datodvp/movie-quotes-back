@@ -32,12 +32,13 @@ class CommentController extends Controller
 				'text'      => 'Commented to your movie quote',
 				'is_active' => true,
 			]);
+
+			NotificationAdded::dispatch($notification->load('notifiable.user'));
 		}
 
 		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
 		QuoteCommented::dispatch($quote);
-		NotificationAdded::dispatch($notification->load('notifiable.user'));
 
 		return $this->success([
 			'message'      => 'comment added',

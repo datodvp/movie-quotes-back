@@ -31,7 +31,6 @@ class NotificationController extends Controller
 		]);
 
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
-		$notifications->load('notifiable');
 
 		foreach ($notifications as $notification) {
 			$notification->created_ago = $notification->created_at->diffForHumans();
