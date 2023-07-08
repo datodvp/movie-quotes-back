@@ -15,12 +15,8 @@ class UserController extends Controller
 
 	public function userData(): JsonResponse
 	{
-		$user = auth()->user()->load('notifications');
+		$user = auth()->user();
 
-		// Add the created_ago field to each notification
-		foreach ($user->notifications as $notification) {
-			$notification->created_ago = $notification->created_at->diffForHumans();
-		}
 		return $this->success([
 			'user' => $user,
 		]);

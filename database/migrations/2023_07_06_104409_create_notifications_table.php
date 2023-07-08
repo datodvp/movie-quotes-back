@@ -15,6 +15,7 @@ return new class extends Migration {
 			$table->id();
 			$table->string('username');
 			$table->string('text');
+			$table->boolean('is_active');
 			$table->morphs('notifiable');
 			$table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
 			$table->timestamps();

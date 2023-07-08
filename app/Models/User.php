@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPasswordC
 		return $this->hasMany(Notification::class);
 	}
 
-	public function likessNotifiable(): MorphMany
+	public function likesNotifiable(): MorphMany
 	{
 		return $this->morphMany(Notification::class, 'notifiable');
 	}
