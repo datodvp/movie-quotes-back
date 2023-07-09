@@ -13,14 +13,14 @@ class QuoteCommented implements ShouldBroadcast, ShouldQueue
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $updatedQuote;
+	public $comment;
 
 	/**
 	 * Create a new event instance.
 	 */
-	public function __construct($updatedQuote)
+	public function __construct($comment)
 	{
-		$this->updatedQuote = $updatedQuote;
+		$this->comment = $comment;
 	}
 
 	/**

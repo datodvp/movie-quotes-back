@@ -36,13 +36,11 @@ class CommentController extends Controller
 			NotificationAdded::dispatch($notification->load('notifiable.user'));
 		}
 
-		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
-
-		QuoteCommented::dispatch($quote);
-
+		$comment->unsetRelation('quote');
+		QuoteCommented::dispatch($comment);
 		return $this->success([
 			'message'      => 'comment added',
-			'updatedQuote' => $quote,
+			'comment'      => $comment,
 		]);
 	}
 }
