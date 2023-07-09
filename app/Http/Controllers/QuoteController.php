@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationAdded;
 use App\Events\QuoteLikeAction;
 use App\Events\QuoteUnlikeAction;
 use App\Http\Requests\StoreQuoteLikeRequest;
@@ -51,12 +52,15 @@ class QuoteController extends Controller
 
 		// if user liked his own quote dont notify
 		if ($user->id !== $quote->user->id) {
-			$user->likesNotifiable()->create([
+			$notification = $user->likesNotifiable()->create([
 				'user_id'   => $quote->user->id,
 				'username'  => $user->username,
 				'text'      => 'Reacted to your quote',
 				'is_active' => true,
 			]);
+			$notification['created_ago'] = $notification->created_at->diffForHumans();
+
+			NotificationAdded::dispatch($notification->load('notifiable'));
 		}
 
 		$like = $user->likedQuotes()->find($validated['quote_id']);
