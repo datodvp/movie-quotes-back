@@ -19,7 +19,7 @@ class NotificationAdded implements ShouldBroadcast
 
 	public function __construct($notification)
 	{
-		$this->notification = $notification;
+		$this->notification = [$notification];
 	}
 
 	/**
@@ -30,7 +30,7 @@ class NotificationAdded implements ShouldBroadcast
 	public function broadcastOn(): array
 	{
 		return [
-			new PrivateChannel('notifications.' . $this->notification->user_id),
+			new PrivateChannel('notifications.' . $this->notification[0]->user_id),
 		];
 	}
 }

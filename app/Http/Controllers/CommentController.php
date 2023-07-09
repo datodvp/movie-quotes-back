@@ -32,6 +32,7 @@ class CommentController extends Controller
 				'text'      => 'Commented to your movie quote',
 				'is_active' => true,
 			]);
+			$notification['created_ago'] = $notification->created_at->diffForHumans();
 
 			NotificationAdded::dispatch($notification->load('notifiable.user'));
 		}
