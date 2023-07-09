@@ -25,6 +25,23 @@ class MovieController extends Controller
 		]);
 	}
 
+	public function search(): JsonResponse
+	{
+		$query = request()->input('search');
+
+		// search movies only created by authorized user
+		$movies = Movie::where('user_id', auth()->user()->id)
+		->where(function ($dbQuery) use ($query) {
+			$dbQuery->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$query}%"])
+					->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$query}%"]);
+		})
+		->get();
+
+		return $this->success([
+			'movies' => $movies,
+		]);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 */

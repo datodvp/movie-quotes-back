@@ -49,13 +49,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 	Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
+	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
 	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 	Route::get('/movie-genres', [MovieController::class, 'genres'])->name('movies.genres');
 	Route::get('/movies-list', [MovieController::class, 'getAllMovies'])->name('movies.list');
 
 	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.list');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
-	Route::post('/quotes/search', [QuoteController::class, 'search'])->name('quotes.search');
+	Route::post('/quotes-search', [QuoteController::class, 'search'])->name('quotes.search');
 	Route::post('/quote-like', [QuoteController::class, 'storeLike'])->name('quotes.storeLike');
 	Route::post('/quote-destroy-like', [QuoteController::class, 'destroyLike'])->name('quotes.destroyLike');
 
