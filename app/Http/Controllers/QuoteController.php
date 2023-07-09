@@ -9,6 +9,7 @@ use App\Http\Requests\StoreQuoteLikeRequest;
 use App\Http\Requests\StoreQuoteRequest;
 use App\Models\Quote;
 use App\Traits\HttpResponses;
+use Illuminate\Http\JsonResponse;
 
 class QuoteController extends Controller
 {
@@ -17,6 +18,37 @@ class QuoteController extends Controller
 	public function index()
 	{
 		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])->orderByDesc('created_at')->get();
+
+		return $this->success([
+			'quotes' => $quotes,
+		]);
+	}
+
+	public function search(): JsonResponse
+	{
+		$query = request()->input('search');
+
+		if ($query[0] === '#') {
+			$search = ltrim($query, '#');
+			$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
+					->whereRaw("json_extract(text, '$.ka') LIKE ?", ["%{$search}%"])
+					->orWhereRaw("json_extract(text, '$.en') LIKE ?", ["%{$search}%"])
+					->get();
+		}
+
+		if ($query[0] === '@') {
+			$search = ltrim($query, '@');
+			$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
+			->whereHas('movie', function ($query) use ($search) {
+				$query->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$search}%"])
+				->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$search}%"]);
+			})
+			->get();
+		}
+		// if there is no tag just send empty array
+		if ($query[0] !== '@' && $query[0] !== '#') {
+			$quotes = [];
+		}
 
 		return $this->success([
 			'quotes' => $quotes,

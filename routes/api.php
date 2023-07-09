@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.list');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+	Route::post('/quotes/search', [QuoteController::class, 'search'])->name('quotes.search');
 	Route::post('/quote-like', [QuoteController::class, 'storeLike'])->name('quotes.storeLike');
 	Route::post('/quote-destroy-like', [QuoteController::class, 'destroyLike'])->name('quotes.destroyLike');
 
