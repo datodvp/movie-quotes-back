@@ -134,6 +134,16 @@ class MovieController extends Controller
 	 */
 	public function destroy(string $id)
 	{
+		$movie = Movie::find($id);
+		if ($movie->user_id !== auth()->user()->id) {
+			return $this->error('', 403, 'you cant do that!');
+		}
+
+		$movie->delete();
+
+		return $this->success([
+			'Movie have been removed!',
+		]);
 	}
 
 	public function genres(): JsonResponse
