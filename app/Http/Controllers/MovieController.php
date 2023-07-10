@@ -19,7 +19,7 @@ class MovieController extends Controller
 	public function index()
 	{
 		$movies = Movie::where('user_id', auth()->user()->id)->get();
-
+		$movies->load('quotes');
 		return $this->success([
 			'movies' => $movies,
 		]);
@@ -36,6 +36,8 @@ class MovieController extends Controller
 					->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$query}%"]);
 		})
 		->get();
+
+		$movies->load('quotes');
 
 		return $this->success([
 			'movies' => $movies,
