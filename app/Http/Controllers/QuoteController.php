@@ -17,7 +17,9 @@ class QuoteController extends Controller
 
 	public function index()
 	{
-		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])->orderByDesc('created_at')->get();
+		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
+					->orderByDesc('created_at')
+					->simplePaginate(2);
 
 		return $this->success([
 			'quotes' => $quotes,
