@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
@@ -80,7 +80,7 @@ class MovieController extends Controller
 	 */
 	public function show(string $id): JsonResponse
 	{
-		$movie = Movie::find($id)->load('quotes');
+		$movie = Movie::find($id)->load('quotes.comments', 'quotes.likes', 'genres');
 
 		if ($movie->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'you are forbidden from accessing this page');
@@ -94,15 +94,39 @@ class MovieController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 */
-	public function edit(string $id)
+	public function update(UpdateMovieRequest $request, string $id)
 	{
-	}
+		$validated = $request->validated();
+		$validated['genres'] = json_decode($validated['genres'], true);
 
-	/**
-	 * Update the specified resource in storage.
-	 */
-	public function update(Request $request, string $id)
-	{
+		$movie = Movie::find($id);
+
+		$movie->name = $validated['name'];
+		$movie->year = $validated['year'];
+		$movie->director = $validated['director'];
+		$movie->description = $validated['description'];
+
+		// first detach genres to reSet them
+		$movie->genres()->detach();
+
+		foreach ($validated['genres'] as $genre) {
+			$movie->genres()->attach($genre['id']);
+		}
+
+		if (isset($validated['image'])) {
+			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+			$movie->image = $validated['image'];
+			$movie->save();
+		}
+
+		$movie->save();
+
+		$movie->load('quotes.comments', 'quotes.likes', 'genres');
+
+		return $this->success([
+			'message' => 'Movie has been changed!',
+			'movie'   => $movie,
+		]);
 	}
 
 	/**
