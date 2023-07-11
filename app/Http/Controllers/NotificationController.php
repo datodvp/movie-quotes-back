@@ -29,9 +29,12 @@ class NotificationController extends Controller
 	public function markAllRead(): JsonResponse
 	{
 		// make every notification's is_active column false
-		$notifications = Notification::where('user_id', auth()->user()->id)->update([
+		Notification::where('user_id', auth()->user()->id)->update([
 			'is_active' => false,
 		]);
+
+		// get all notifications for current user
+		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
 		// add human readable timestamps to each
 		foreach ($notifications as $notification) {
