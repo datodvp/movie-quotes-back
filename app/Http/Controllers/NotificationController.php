@@ -12,8 +12,10 @@ class NotificationController extends Controller
 
 	public function index(): JsonResponse
 	{
+		// get notifications only for authorized user
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
+		// add human readable timestamps to each
 		foreach ($notifications as $notification) {
 			$notification->created_ago = $notification->created_at->diffForHumans();
 			$notification->notifiable->user;
@@ -26,12 +28,12 @@ class NotificationController extends Controller
 
 	public function markAllRead(): JsonResponse
 	{
-		Notification::where('user_id', auth()->user()->id)->update([
+		// make every notification's is_active column false
+		$notifications = Notification::where('user_id', auth()->user()->id)->update([
 			'is_active' => false,
 		]);
 
-		$notifications = Notification::where('user_id', auth()->user()->id)->get();
-
+		// add human readable timestamps to each
 		foreach ($notifications as $notification) {
 			$notification->created_ago = $notification->created_at->diffForHumans();
 			$notification->notifiable->user;
