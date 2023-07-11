@@ -47,6 +47,7 @@ class QuoteController extends Controller
 			})
 			->get();
 		}
+
 		// if there is no tag just send empty array
 		if ($query[0] !== '@' && $query[0] !== '#') {
 			$quotes = [];
@@ -77,8 +78,9 @@ class QuoteController extends Controller
 	public function destroy(string $id)
 	{
 		$quote = Quote::find($id);
+
 		if ($quote->user_id !== auth()->user()->id) {
-			return $this->error('', 403, 'you cant do that!');
+			return $this->error('', 403, 'Your dont have permission for that!');
 		}
 
 		$quote->delete();
@@ -98,7 +100,7 @@ class QuoteController extends Controller
 
 		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
-		// if user liked his own quote dont notify
+		// if quote is liked by NON-Author of it, SEND notification
 		if ($user->id !== $quote->user->id) {
 			$notification = $user->likesNotifiable()->create([
 				'user_id'   => $quote->user->id,
@@ -113,8 +115,7 @@ class QuoteController extends Controller
 
 		$like = $user->likedQuotes()->find($validated['quote_id']);
 
-		$pivot = $like->pivot;
-
+		// broadcast for other users
 		QuoteLikeAction::dispatch($like);
 
 		return $this->success([
@@ -129,12 +130,16 @@ class QuoteController extends Controller
 
 		$user = auth()->user();
 
+		// get removed like
 		$like = $user->likedQuotes()->find($validated['quote_id']);
 
-		$user->likedQuotes()->detach($validated);
+		// detach like
+		$user->likedQuotes()->detach($like);
 
+		// remove notification for it
 		$user->likesNotifiable()->delete();
 
+		// broadcast for other users
 		QuoteUnlikeAction::dispatch($like);
 
 		return $this->success([
