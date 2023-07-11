@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\updateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Mail\VerifyEmail;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +19,7 @@ class UserController extends Controller
 		]);
 	}
 
-	public function update(updateUserRequest $request): JsonResponse
+	public function update(UpdateUserRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
