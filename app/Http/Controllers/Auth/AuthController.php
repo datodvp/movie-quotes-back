@@ -32,7 +32,7 @@ class AuthController extends Controller
 		if (!auth()->user()->hasVerifiedEmail()) {
 			auth()->logout();
 
-			return $this->error('', 403, __('messages.not_verified'));
+			return $this->error('', 400, __('messages.not_verified'));
 		}
 
 		$user = auth()->user();

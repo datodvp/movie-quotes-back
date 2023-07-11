@@ -44,8 +44,8 @@ Route::middleware(['guest:sanctum'])->group(function () {
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-	Route::get('/user-data', [UserController::class, 'userData'])->name('auth.userData');
-	Route::post('/change-user-credentials', [UserController::class, 'changeUserCredentials'])->name('auth.changeUserCredentials');
+	Route::get('/user', [UserController::class, 'index'])->name('user.index');
+	Route::post('/user', [UserController::class, 'update'])->name('user.update');
 
 	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 	Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
