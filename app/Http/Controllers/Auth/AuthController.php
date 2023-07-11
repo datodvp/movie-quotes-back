@@ -20,7 +20,6 @@ class AuthController extends Controller
 	public function login(LoginUserRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
-		$user = auth()->user();
 
 		// Check if "login" field is Email or Username
 		$fieldName = filter_var($validated['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -31,6 +30,8 @@ class AuthController extends Controller
 		if (!auth()->attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
 			return $this->error('', 401, __('messages.authorization_failed'));
 		}
+
+		$user = auth()->user();
 
 		if (!$user->hasVerifiedEmail()) {
 			auth()->logout();
