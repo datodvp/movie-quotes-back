@@ -74,6 +74,20 @@ class QuoteController extends Controller
 		]);
 	}
 
+	public function destroy(string $id)
+	{
+		$quote = Quote::find($id);
+		if ($quote->user_id !== auth()->user()->id) {
+			return $this->error('', 403, 'you cant do that!');
+		}
+
+		$quote->delete();
+
+		return $this->success([
+			'Movie have been removed!',
+		]);
+	}
+
 	public function storeLike(StoreQuoteLikeRequest $request)
 	{
 		$validated = $request->validated();

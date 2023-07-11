@@ -82,7 +82,13 @@ class MovieController extends Controller
 	 */
 	public function show(string $id): JsonResponse
 	{
-		$movie = Movie::find($id)->load('quotes.comments', 'quotes.likes', 'genres');
+		$movie = Movie::find($id);
+
+		if (!$movie) {
+			return $this->error('', 404, 'Nothing found');
+		} else {
+			$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
+		}
 
 		if ($movie->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'you are forbidden from accessing this page');
