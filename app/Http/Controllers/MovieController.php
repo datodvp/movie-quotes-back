@@ -44,7 +44,7 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function store(StoreMovieRequest $request)
+	public function store(StoreMovieRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
@@ -91,7 +91,7 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function update(UpdateMovieRequest $request, string $id)
+	public function update(UpdateMovieRequest $request, string $id): JsonResponse
 	{
 		$validated = $request->validated();
 		$validated['genres'] = json_decode($validated['genres'], true);
@@ -122,7 +122,7 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function destroy(string $id)
+	public function destroy(string $id): JsonResponse
 	{
 		$movie = Movie::find($id);
 

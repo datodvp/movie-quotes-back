@@ -15,7 +15,7 @@ class QuoteController extends Controller
 {
 	use HttpResponses;
 
-	public function index()
+	public function index(): JsonResponse
 	{
 		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
 					->orderByDesc('created_at')
@@ -58,7 +58,7 @@ class QuoteController extends Controller
 		]);
 	}
 
-	public function store(StoreQuoteRequest $request)
+	public function store(StoreQuoteRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
@@ -75,7 +75,7 @@ class QuoteController extends Controller
 		]);
 	}
 
-	public function destroy(string $id)
+	public function destroy(string $id): JsonResponse
 	{
 		$quote = Quote::find($id);
 
@@ -90,7 +90,7 @@ class QuoteController extends Controller
 		]);
 	}
 
-	public function storeLike(StoreQuoteLikeRequest $request)
+	public function storeLike(StoreQuoteLikeRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 
@@ -124,7 +124,7 @@ class QuoteController extends Controller
 		]);
 	}
 
-	public function destroyLike(StoreQuoteLikeRequest $request)
+	public function destroyLike(StoreQuoteLikeRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 

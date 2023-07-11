@@ -8,6 +8,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPasswordC
 	 *
 	 * @var array<int, string>
 	 */
-	public function likedQuotes()
+	public function likedQuotes(): BelongsToMany
 	{
 		return $this->belongsToMany(Quote::class, 'quote_user', 'user_id', 'quote_id');
 	}
