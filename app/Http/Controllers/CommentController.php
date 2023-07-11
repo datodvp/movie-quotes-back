@@ -6,7 +6,6 @@ use App\Events\NotificationAdded;
 use App\Events\QuoteCommented;
 use App\Http\Requests\StoreCommentRequest;
 use App\Models\Comment;
-use App\Models\Quote;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
 
@@ -24,7 +23,7 @@ class CommentController extends Controller
 
 		$notification = [];
 
-		// if commenter himself is quote author DONT notify
+		// if commenter is not the post author, send notification
 		if ($comment->user->id !== $comment->quote->user->id) {
 			$notification = $comment->notifications()->create([
 				'user_id'   => $comment->quote->user->id,
@@ -32,13 +31,15 @@ class CommentController extends Controller
 				'text'      => 'Commented to your movie quote',
 				'is_active' => true,
 			]);
-			$notification['created_ago'] = $notification->created_at->diffForHumans();
 
+			$notification['created_ago'] = $notification->created_at->diffForHumans();
 			NotificationAdded::dispatch($notification->load('notifiable.user'));
 		}
 
 		$comment->unsetRelation('quote');
+
 		QuoteCommented::dispatch($comment);
+
 		return $this->success([
 			'message'      => 'comment added',
 			'comment'      => $comment,
