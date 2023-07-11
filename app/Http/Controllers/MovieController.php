@@ -13,13 +13,13 @@ class MovieController extends Controller
 {
 	use HttpResponses;
 
-	/**
-	 * Display a listing of the resource.
-	 */
 	public function index()
 	{
+		// get only movies created by authorized user
 		$movies = Movie::where('user_id', auth()->user()->id)->get();
+
 		$movies->load('quotes');
+
 		return $this->success([
 			'movies' => $movies,
 		]);
@@ -44,9 +44,6 @@ class MovieController extends Controller
 		]);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 */
 	public function store(StoreMovieRequest $request)
 	{
 		$validated = $request->validated();
@@ -70,38 +67,30 @@ class MovieController extends Controller
 
 	public function getAllMovies(): JsonResponse
 	{
-		$movies = Movie::all();
-
 		return $this->success([
-			'movies' => $movies,
+			'movies' => Movie::all(),
 		]);
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function show(string $id): JsonResponse
 	{
 		$movie = Movie::find($id);
 
 		if (!$movie) {
-			return $this->error('', 404, 'Nothing found');
-		} else {
-			$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
+			return $this->error('', 404, 'Movie not found');
 		}
 
 		if ($movie->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'you are forbidden from accessing this page');
 		}
 
+		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
+
 		return $this->success([
 			'movie' => $movie,
 		]);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 */
 	public function update(UpdateMovieRequest $request, string $id)
 	{
 		$validated = $request->validated();
@@ -109,10 +98,7 @@ class MovieController extends Controller
 
 		$movie = Movie::find($id);
 
-		$movie->name = $validated['name'];
-		$movie->year = $validated['year'];
-		$movie->director = $validated['director'];
-		$movie->description = $validated['description'];
+		$movie->update($validated);
 
 		// first detach genres to reSet them
 		$movie->genres()->detach();
@@ -124,7 +110,6 @@ class MovieController extends Controller
 		if (isset($validated['image'])) {
 			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
 			$movie->image = $validated['image'];
-			$movie->save();
 		}
 
 		$movie->save();
@@ -137,12 +122,11 @@ class MovieController extends Controller
 		]);
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 */
 	public function destroy(string $id)
 	{
 		$movie = Movie::find($id);
+
+		// check if delete request if from author of the movie
 		if ($movie->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'you cant do that!');
 		}
