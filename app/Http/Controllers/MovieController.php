@@ -59,6 +59,8 @@ class MovieController extends Controller
 			$movie->genres()->attach($genre['id']);
 		}
 
+		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
+
 		return response()->json([
 			'message' => 'movie added succesfully',
 			'movie'   => $movie,
