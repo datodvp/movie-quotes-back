@@ -49,14 +49,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 	Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
+	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 	Route::post('/movies/{id}', [MovieController::class, 'update'])->name('movies.update');
 	Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
 	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
-	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
 	Route::get('/movie-genres', [MovieController::class, 'genres'])->name('movies.genres');
 	Route::get('/movies-list', [MovieController::class, 'getAllMovies'])->name('movies.list');
 
-	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.list');
+	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
 	Route::delete('/quotes/{id}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
 	Route::post('/quotes-search', [QuoteController::class, 'search'])->name('quotes.search');
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 
-	Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.list');
+	Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 	Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 });
 
