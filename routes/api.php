@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 	Route::get('/user', [UserController::class, 'index'])->name('user.index');
-	Route::post('/user', [UserController::class, 'update'])->name('user.update');
+	Route::patch('/user', [UserController::class, 'update'])->name('user.update');
 
 	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 	Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
