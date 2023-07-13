@@ -49,13 +49,7 @@ class MovieController extends Controller
 
 	public function show(Movie $movie): JsonResponse
 	{
-		if (!$movie) {
-			return $this->error('', 404, 'Movie not found');
-		}
-
-		if ($movie->user_id !== auth()->user()->id) {
-			return $this->error('', 403, 'you are forbidden from accessing this page');
-		}
+		$this->authorize('interact', $movie);
 
 		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
 
@@ -66,6 +60,8 @@ class MovieController extends Controller
 
 	public function update(UpdateMovieRequest $request, Movie $movie): JsonResponse
 	{
+		$this->authorize('interact', $movie);
+
 		$validated = $request->validated();
 
 		$movie->update($validated);
@@ -93,9 +89,7 @@ class MovieController extends Controller
 	public function destroy(Movie $movie): JsonResponse
 	{
 		// check if delete request if from author of the movie
-		if ($movie->user_id !== auth()->user()->id) {
-			return $this->error('', 403, 'you cant do that!');
-		}
+		$this->authorize('interact', $movie);
 
 		$movie->delete();
 

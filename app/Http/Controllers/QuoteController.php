@@ -51,6 +51,8 @@ class QuoteController extends Controller
 
 	public function destroy(Quote $quote): JsonResponse
 	{
+		$this->authorize('interact', $quote);
+
 		if ($quote->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'Your dont have permission for that!');
 		}
