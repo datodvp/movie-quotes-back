@@ -56,7 +56,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
 
 	Route::get('/movie-genres', [MovieController::class, 'genres'])->name('movies.genres');
-	Route::get('/movies-list', [MovieController::class, 'getAllMovies'])->name('movies.list');
 
 	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');

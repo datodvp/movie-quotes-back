@@ -67,13 +67,6 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function getAllMovies(): JsonResponse
-	{
-		return $this->success([
-			'movies' => Movie::all(),
-		]);
-	}
-
 	public function show(string $id): JsonResponse
 	{
 		$movie = Movie::find($id);
