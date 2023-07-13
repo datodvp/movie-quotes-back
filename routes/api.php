@@ -50,10 +50,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/user', [UserController::class, 'update'])->name('user.update');
 
 	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
-	Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
+	Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
 	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
-	Route::patch('/movies/{id}', [MovieController::class, 'update'])->name('movies.update');
-	Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
+	Route::patch('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
+	Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
 	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
 
 	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.index');

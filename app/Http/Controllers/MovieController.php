@@ -62,10 +62,8 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function show(string $id): JsonResponse
+	public function show(Movie $movie): JsonResponse
 	{
-		$movie = Movie::find($id);
-
 		if (!$movie) {
 			return $this->error('', 404, 'Movie not found');
 		}
@@ -81,11 +79,9 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function update(UpdateMovieRequest $request, string $id): JsonResponse
+	public function update(UpdateMovieRequest $request, Movie $movie): JsonResponse
 	{
 		$validated = $request->validated();
-
-		$movie = Movie::find($id);
 
 		$movie->update($validated);
 
@@ -109,10 +105,8 @@ class MovieController extends Controller
 		]);
 	}
 
-	public function destroy(string $id): JsonResponse
+	public function destroy(Movie $movie): JsonResponse
 	{
-		$movie = Movie::find($id);
-
 		// check if delete request if from author of the movie
 		if ($movie->user_id !== auth()->user()->id) {
 			return $this->error('', 403, 'you cant do that!');
