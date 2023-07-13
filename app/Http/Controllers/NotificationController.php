@@ -15,11 +15,7 @@ class NotificationController extends Controller
 		// get notifications only for authorized user
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
-		// add human readable timestamps to each
-		foreach ($notifications as $notification) {
-			$notification->created_ago = $notification->created_at->diffForHumans();
-			$notification->notifiable->user;
-		}
+		$notifications->load('notifiable.user');
 
 		return $this->success([
 			'notifications' => $notifications,
@@ -36,11 +32,7 @@ class NotificationController extends Controller
 		// get all notifications for current user
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
-		// add human readable timestamps to each
-		foreach ($notifications as $notification) {
-			$notification->created_ago = $notification->created_at->diffForHumans();
-			$notification->notifiable->user;
-		}
+		$notifications->load('notifiable.user');
 
 		return $this->success([
 			'notifications' => $notifications,

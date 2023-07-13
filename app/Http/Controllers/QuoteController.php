@@ -102,7 +102,7 @@ class QuoteController extends Controller
 
 		// if quote is liked by NON-Author of it, SEND notification
 		if ($user->id !== $quote->user->id) {
-			$notification = $user->likesNotifiable()->create([
+			$notification = $quote->notifiable()->create([
 				'user_id'   => $quote->user->id,
 				'username'  => $user->username,
 				'text'      => 'Reacted to your quote',
@@ -136,8 +136,10 @@ class QuoteController extends Controller
 		// detach like
 		$user->likedQuotes()->detach($like);
 
+		$quote = Quote::find($validated['quote_id']);
+
 		// remove notification for it
-		$user->likesNotifiable()->delete();
+		$quote->notifiable()->delete();
 
 		// broadcast for other users
 		QuoteUnlikeAction::dispatch($like);
