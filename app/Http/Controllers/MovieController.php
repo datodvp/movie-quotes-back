@@ -17,26 +17,11 @@ class MovieController extends Controller
 		// get only movies created by authorized user
 		$movies = Movie::where('user_id', auth()->user()->id)->get();
 
-		$movies->load('quotes');
+		if ($search = request()->query('search')) {
+			$movies = Movie::filter($search)->get();
+		}
 
-		return $this->success([
-			'movies' => $movies,
-		]);
-	}
-
-	public function search(): JsonResponse
-	{
-		$query = request()->input('search');
-
-		// search movies only created by authorized user
-		$movies = Movie::where('user_id', auth()->user()->id)
-		->where(function ($dbQuery) use ($query) {
-			$dbQuery->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$query}%"])
-					->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$query}%"]);
-		})
-		->get();
-
-		$movies->load('quotes');
+		// $movies->load('quotes');
 
 		return $this->success([
 			'movies' => $movies,

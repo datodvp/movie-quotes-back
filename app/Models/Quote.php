@@ -36,4 +36,21 @@ class Quote extends Model
 	{
 		return $this->belongsToMany(User::class, 'quote_user', 'quote_id', 'user_id');
 	}
+
+	public function scopeFilter($query, $search)
+	{
+		if ($search[0] === '#') {
+			$trimmedSearch = ltrim($search, '#');
+			$query->whereRaw("json_extract(text, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
+					->orWhereRaw("json_extract(text, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
+		}
+
+		if ($search[0] === '@') {
+			$trimmedSearch = ltrim($search, '@');
+			$query->whereHas('movie', function ($query) use ($trimmedSearch) {
+				$query->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
+				->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
+			});
+		}
+	}
 }

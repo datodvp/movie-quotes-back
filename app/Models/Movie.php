@@ -14,6 +14,8 @@ class Movie extends Model
 
 	protected $guarded = ['id'];
 
+	protected $with = ['quotes'];
+
 	// protected $with = ['genres', 'quotes'];
 
 	public $translatable = ['name', 'director', 'description'];
@@ -26,5 +28,14 @@ class Movie extends Model
 	public function quotes(): HasMany
 	{
 		return $this->HasMany(Quote::class);
+	}
+
+	public function scopeFilter($query, $search)
+	{
+		$query->where('user_id', auth()->user()->id)
+		->where(function ($dbQuery) use ($search) {
+			$dbQuery->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$search}%"])
+					->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$search}%"]);
+		});
 	}
 }

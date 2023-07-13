@@ -55,13 +55,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::patch('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
 	Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
 
-	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
-
 	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.index');
 
 	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
-	Route::delete('/quotes/{id}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
+	Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
 	Route::post('/quotes-search', [QuoteController::class, 'search'])->name('quotes.search');
 
 	Route::post('/quote-like', [LikeController::class, 'store'])->name('like.store');
