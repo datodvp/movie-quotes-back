@@ -48,16 +48,12 @@ class MovieController extends Controller
 	{
 		$validated = $request->validated();
 
-		$validated['user_id'] = auth()->user()->id;
-		$validated['genres'] = json_decode($validated['genres'], true);
 		$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
 
 		$movie = Movie::create($validated);
 
 		// attach genres to movie
-		foreach ($validated['genres'] as $genre) {
-			$movie->genres()->attach($genre['id']);
-		}
+		$movie->genres()->sync($validated['genres']);
 
 		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
 
@@ -89,7 +85,6 @@ class MovieController extends Controller
 	public function update(UpdateMovieRequest $request, string $id): JsonResponse
 	{
 		$validated = $request->validated();
-		$validated['genres'] = json_decode($validated['genres'], true);
 
 		$movie = Movie::find($id);
 
@@ -98,9 +93,7 @@ class MovieController extends Controller
 		// first detach genres to reSet them
 		$movie->genres()->detach();
 
-		foreach ($validated['genres'] as $genre) {
-			$movie->genres()->attach($genre['id']);
-		}
+		$movie->genres()->attach($validated['genres']);
 
 		if (isset($validated['image'])) {
 			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');

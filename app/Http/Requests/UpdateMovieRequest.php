@@ -25,4 +25,12 @@ class UpdateMovieRequest extends FormRequest
 			'image'          => ['sometimes', 'image'],
 		];
 	}
+
+	public function prepareForValidation(): void
+	{
+		$this->merge([
+			'user_id' => auth()->user()->id,
+			'genres'  => json_decode($this->genres, true),
+		]);
+	}
 }

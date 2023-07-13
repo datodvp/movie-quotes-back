@@ -17,8 +17,6 @@ class CommentController extends Controller
 	{
 		$validated = $request->validated();
 
-		$validated['user_id'] = auth()->user()->id;
-
 		$comment = Comment::create($validated);
 
 		$notification = [];

@@ -16,6 +16,14 @@ class StoreCommentRequest extends FormRequest
 		return [
 			'text'     => ['required', 'max:1000'],
 			'quote_id' => ['required', 'integer'],
+			'user_id'  => ['required'],
 		];
+	}
+
+	protected function prepareForValidation(): void
+	{
+		$this->merge([
+			'user_id' => auth()->user()->id,
+		]);
 	}
 }

@@ -21,8 +21,17 @@ class StoreMovieRequest extends FormRequest
 			'director.ka'    => ['required', 'min:3', 'max:255'],
 			'description.en' => ['required', 'min:3'],
 			'description.ka' => ['required', 'min:3'],
-			'genres'         => ['required'],
+			'genres'         => ['required', 'array'],
 			'image'          => ['required', 'image'],
+			'user_id'        => ['required'],
 		];
+	}
+
+	public function prepareForValidation(): void
+	{
+		$this->merge([
+			'user_id' => auth()->user()->id,
+			'genres'  => json_decode($this->genres, true),
+		]);
 	}
 }
