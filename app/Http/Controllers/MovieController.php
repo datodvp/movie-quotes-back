@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
-use App\Models\Genre;
 use App\Models\Movie;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +12,7 @@ class MovieController extends Controller
 {
 	use HttpResponses;
 
-	public function index()
+	public function index(): JsonResponse
 	{
 		// get only movies created by authorized user
 		$movies = Movie::where('user_id', auth()->user()->id)->get();
@@ -97,12 +96,12 @@ class MovieController extends Controller
 
 		if (isset($validated['image'])) {
 			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
-			$movie->image = $validated['image'];
+			$movie->update([
+				'image' => $validated['image'],
+			]);
 		}
 
 		$movie->save();
-
-		$movie->load('quotes.comments', 'quotes.likes', 'genres');
 
 		return $this->success([
 			'message' => 'Movie has been changed!',
@@ -123,15 +122,6 @@ class MovieController extends Controller
 
 		return $this->success([
 			'Movie have been removed!',
-		]);
-	}
-
-	public function genres(): JsonResponse
-	{
-		$genres = Genre::all();
-
-		return $this->success([
-			'genres' => $genres,
 		]);
 	}
 }

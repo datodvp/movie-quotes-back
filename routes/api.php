@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\NotificationController;
@@ -55,7 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
 	Route::post('/movies-search', [MovieController::class, 'search'])->name('movies.search');
 
-	Route::get('/movie-genres', [MovieController::class, 'genres'])->name('movies.genres');
+	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.index');
 
 	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
 	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');

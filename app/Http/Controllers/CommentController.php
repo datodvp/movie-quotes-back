@@ -25,6 +25,7 @@ class CommentController extends Controller
 		if ($comment->user->id !== $comment->quote->user->id) {
 			$notification = $comment->notifications()->create([
 				'user_id'   => $comment->quote->user->id,
+				'quote_id'  => $comment->quote->id,
 				'username'  => $comment->user->username,
 				'text'      => 'Commented to your movie quote',
 				'is_active' => true,

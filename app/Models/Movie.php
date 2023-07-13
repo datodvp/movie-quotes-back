@@ -14,6 +14,8 @@ class Movie extends Model
 
 	protected $guarded = ['id'];
 
+	// protected $with = ['genres', 'quotes'];
+
 	public $translatable = ['name', 'director', 'description'];
 
 	public function genres(): BelongsToMany

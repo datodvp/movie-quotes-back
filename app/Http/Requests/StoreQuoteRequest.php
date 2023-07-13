@@ -18,6 +18,14 @@ class StoreQuoteRequest extends FormRequest
 			'text.ka'     => ['required', 'min:3', 'max:255'],
 			'image'       => ['required', 'image'],
 			'movie_id'    => ['required', 'integer'],
+			'user_id'     => ['required'],
 		];
+	}
+
+	public function prepareForValidation(): void
+	{
+		$this->merge([
+			'user_id' => auth()->user()->id,
+		]);
 	}
 }

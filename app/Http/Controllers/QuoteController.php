@@ -58,7 +58,6 @@ class QuoteController extends Controller
 	{
 		$validated = $request->validated();
 
-		$validated['user_id'] = auth()->user()->id;
 		$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
 
 		$quote = Quote::create($validated);

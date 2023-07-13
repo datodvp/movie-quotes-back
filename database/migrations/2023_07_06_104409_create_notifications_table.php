@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration {
 			$table->string('text');
 			$table->boolean('is_active');
 			$table->morphs('notifiable');
+			$table->foreignIdFor(Quote::class)->constrained()->cascadeOnDelete();
 			$table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
 			$table->timestamps();
 		});

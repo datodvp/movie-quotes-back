@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -17,6 +18,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements MustVerifyEmail, CanResetPasswordContract
 {
 	use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
+
+	protected $with = ['likedQuotes'];
 
 	/**
 	 * The attributes that are mass assignable.
@@ -31,6 +34,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPasswordC
 	public function notifications(): HasMany
 	{
 		return $this->hasMany(Notification::class);
+	}
+
+	public function likeNotifiable(): MorphMany
+	{
+		return $this->morphMany(Notification::class, 'notifiable');
 	}
 
 	protected $fillable = [
