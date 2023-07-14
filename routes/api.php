@@ -30,15 +30,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
 
 Route::middleware(['guest:sanctum'])->group(function () {
-	Route::get('/auth/redirect', [GoogleAuthController::class, 'redirect']);
-	Route::get('/auth/callback', [GoogleAuthController::class, 'callback']);
+	Route::controller(GoogleAuthController::class)->group(function () {
+		Route::get('/auth/redirect', 'redirect');
+		Route::get('/auth/callback', 'callback');
+	});
 
-	Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('auth.login');
-	Route::post('/register', [AuthController::class, 'register'])->middleware('guest')->name('auth.register');
+	Route::controller(AuthController::class)->group(function () {
+		Route::post('/login', 'login')->middleware('guest')->name('auth.login');
+		Route::post('/register', 'register')->middleware('guest')->name('auth.register');
+	});
 
-	Route::post('/forgot-password', [PasswordResetController::class, 'check'])->middleware('guest')->name('password.email');
-	Route::get('/reset-password/{token}', [PasswordResetController::class, 'redirect'])->middleware('guest')->name('password.reset');
-	Route::post('/reset-password', [PasswordResetController::class, 'update'])->middleware('guest')->name('password.update');
+	Route::controller(PasswordResetController::class)->group(function () {
+		Route::post('/forgot-password', 'check')->middleware('guest')->name('password.email');
+		Route::get('/reset-password/{token}', 'redirect')->middleware('guest')->name('password.reset');
+		Route::post('/reset-password', 'update')->middleware('guest')->name('password.update');
+	});
 });
 
 // Protected routes
@@ -46,29 +52,42 @@ Route::middleware(['guest:sanctum'])->group(function () {
 Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-	Route::get('/user', [UserController::class, 'index'])->name('user.index');
-	Route::patch('/user', [UserController::class, 'update'])->name('user.update');
+	Route::controller(UserController::class)->group(function () {
+		Route::get('/user', 'index')->name('user.index');
+		Route::patch('/user', 'update')->name('user.update');
+	});
 
-	Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
-	Route::get('/movies/{movie}', [MovieController::class, 'show'])->name('movies.show');
-	Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
-	Route::patch('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
-	Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+	Route::prefix('movies')->group(function () {
+		Route::controller(MovieController::class)->group(function () {
+			Route::get('/', 'index')->name('movies.index');
+			Route::get('/{movie}', 'show')->name('movies.show');
+			Route::post('/', 'store')->name('movies.store');
+			Route::patch('/{movie}', 'update')->name('movies.update');
+			Route::delete('/{movie}', 'destroy')->name('movies.destroy');
+		});
+	});
 
 	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.index');
 
-	Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
-	Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
-	Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
-	Route::post('/quotes-search', [QuoteController::class, 'search'])->name('quotes.search');
+	Route::prefix('quotes')->group(function () {
+		Route::controller(QuoteController::class)->group(function () {
+			Route::get('/', 'index')->name('quotes.index');
+			Route::post('/', 'store')->name('quotes.store');
+			Route::delete('/{quote}', 'destroy')->name('quotes.destroy');
+		});
+	});
 
-	Route::post('/quote-like', [LikeController::class, 'store'])->name('like.store');
-	Route::post('/quote-destroy-like', [LikeController::class, 'destroy'])->name('like.destroy');
+	Route::controller(LikeController::class)->group(function () {
+		Route::post('/quote-like', 'store')->name('like.store');
+		Route::post('/quote-destroy-like', 'destroy')->name('like.destroy');
+	});
 
 	Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
 
-	Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-	Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+	Route::controller(NotificationController::class)->group(function () {
+		Route::get('/notifications', 'index')->name('notifications.index');
+		Route::get('/notifications/mark-all-read', 'markAllRead')->name('notifications.markAllRead');
+	});
 });
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
