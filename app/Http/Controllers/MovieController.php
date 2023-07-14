@@ -81,6 +81,8 @@ class MovieController extends Controller
 
 		$movie->save();
 
+		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
+
 		return $this->success([
 			'message' => 'Movie has been changed!',
 			'movie'   => new MovieResource($movie),
