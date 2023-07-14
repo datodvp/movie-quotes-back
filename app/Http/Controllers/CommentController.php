@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NotificationAdded;
 use App\Events\QuoteCommented;
 use App\Http\Requests\StoreCommentRequest;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +42,7 @@ class CommentController extends Controller
 
 		return $this->success([
 			'message'      => 'comment added',
-			'comment'      => $comment,
+			'comment'      => new CommentResource($comment),
 		]);
 	}
 }

@@ -43,7 +43,13 @@ class NotificationController extends Controller
 		// get all notifications for current user
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
-		$notifications->load('notifiable');
+		foreach ($notifications as $notification) {
+			$notifiable = $notification->notifiable;
+
+			if ($notifiable instanceof Comment) {
+				$notification->notifiable->load('user');
+			}
+		}
 
 		return $this->success([
 			'notifications' => NotificationResource::collection($notifications),
