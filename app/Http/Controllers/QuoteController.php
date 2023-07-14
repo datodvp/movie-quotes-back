@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuoteRequest;
+use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +30,7 @@ class QuoteController extends Controller
 		}
 
 		return $this->success([
-			'quotes' => $quotes,
+			'quotes' => QuoteResource::collection($quotes),
 		]);
 	}
 
@@ -45,7 +46,7 @@ class QuoteController extends Controller
 
 		return $this->success([
 			'message' => 'movie added succesfully',
-			'quote'   => $quote,
+			'quote'   => new QuoteResource($quote),
 		]);
 	}
 

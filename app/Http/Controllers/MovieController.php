@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
+use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,7 @@ class MovieController extends Controller
 		// $movies->load('quotes');
 
 		return $this->success([
-			'movies' => $movies,
+			'movies' => MovieResource::collection($movies),
 		]);
 	}
 
@@ -43,7 +44,7 @@ class MovieController extends Controller
 
 		return response()->json([
 			'message' => 'movie added succesfully',
-			'movie'   => $movie,
+			'movie'   => new MovieResource($movie),
 		]);
 	}
 
@@ -54,7 +55,7 @@ class MovieController extends Controller
 		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
 
 		return $this->success([
-			'movie' => $movie,
+			'movie' => new MovieResource($movie),
 		]);
 	}
 
@@ -82,7 +83,7 @@ class MovieController extends Controller
 
 		return $this->success([
 			'message' => 'Movie has been changed!',
-			'movie'   => $movie,
+			'movie'   => new MovieResource($movie),
 		]);
 	}
 

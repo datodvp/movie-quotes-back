@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\NotificationResource;
 use App\Models\Comment;
 use App\Models\Notification;
 use App\Traits\HttpResponses;
@@ -28,7 +29,7 @@ class NotificationController extends Controller
 		}
 
 		return $this->success([
-			'notifications' => $notifications,
+			'notifications' => NotificationResource::collection($notifications),
 		]);
 	}
 
@@ -42,10 +43,10 @@ class NotificationController extends Controller
 		// get all notifications for current user
 		$notifications = Notification::where('user_id', auth()->user()->id)->get();
 
-		$notifications->load('notifiable.user');
+		$notifications->load('notifiable');
 
 		return $this->success([
-			'notifications' => $notifications,
+			'notifications' => NotificationResource::collection($notifications),
 			'message'       => 'Notifications marked as read succesfully',
 		]);
 	}
