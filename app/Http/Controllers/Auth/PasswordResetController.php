@@ -34,7 +34,7 @@ class PasswordResetController extends Controller
 
 		$token = app('auth.password.broker')->createToken($user);
 
-		Mail::to($validated)->send(new MailPasswordReset($user, $token));
+		Mail::to($validated)->queue(new MailPasswordReset($user, $token));
 
 		return $this->success([
 			'message' => __('auth.reset_link_sent'),

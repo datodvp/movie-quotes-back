@@ -20,22 +20,24 @@ class AuthController extends Controller
 	public function login(LoginUserRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
+
 		// Check if "login" field is Email or Username
 		$fieldName = filter_var($validated['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-		// Create field property for credentials
+
+		// Create field key for credentials
 		$validated[$fieldName] = $validated['login'];
 
 		if (!auth()->attempt(Arr::only($validated, [$fieldName, 'password']), isset($validated['remember']))) {
 			return $this->error('', 401, __('messages.authorization_failed'));
 		}
 
-		if (!auth()->user()->hasVerifiedEmail()) {
+		$user = auth()->user();
+
+		if (!$user->hasVerifiedEmail()) {
 			auth()->logout();
 
-			return $this->error('', 403, __('messages.not_verified'));
+			return $this->error('', 400, __('messages.not_verified'));
 		}
-
-		$user = auth()->user();
 
 		return $this->success([
 			'user'  => $user,
@@ -48,7 +50,7 @@ class AuthController extends Controller
 
 		$user = User::create($validated);
 
-		Mail::to($user)->send(new VerifyEmail($user));
+		Mail::to($user)->queue(new VerifyEmail($user));
 
 		return $this->success([
 			'user'    => $user,
