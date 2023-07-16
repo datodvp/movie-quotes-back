@@ -72,7 +72,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::prefix('quotes')->group(function () {
 		Route::controller(QuoteController::class)->group(function () {
 			Route::get('/', 'index')->name('quotes.index');
+			Route::get('/{quote}', 'show')->name('quotes.show');
 			Route::post('/', 'store')->name('quotes.store');
+			Route::patch('/{quote}', 'update')->name('quotes.update');
 			Route::delete('/{quote}', 'destroy')->name('quotes.destroy');
 		});
 	});
@@ -86,7 +88,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	Route::controller(NotificationController::class)->group(function () {
 		Route::get('/notifications', 'index')->name('notifications.index');
-		Route::get('/notifications/mark-all-read', 'markAllRead')->name('notifications.markAllRead');
+		Route::get('/notifications/{notification}', 'markAsRead')->name('notifications.markAsRead');
+		Route::post('/notifications/mark-all-read', 'markAllRead')->name('notifications.markAllRead');
 	});
 });
 

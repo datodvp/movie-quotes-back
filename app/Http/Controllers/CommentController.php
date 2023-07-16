@@ -33,7 +33,7 @@ class CommentController extends Controller
 			]);
 
 			$notification['created_ago'] = $notification->created_at->diffForHumans();
-			NotificationAdded::dispatch($notification->load('notifiable.user'));
+			NotificationAdded::dispatch($notification->load('notifiable.user', 'quote'));
 		}
 
 		$comment->unsetRelation('quote');

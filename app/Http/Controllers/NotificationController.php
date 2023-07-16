@@ -33,6 +33,28 @@ class NotificationController extends Controller
 		]);
 	}
 
+	public function markAsRead(Notification $notification): JsonResponse
+	{
+		$notification->update([
+			'is_active' => false,
+		]);
+
+		$userNotifications = Notification::where('user_id', auth()->user()->id)->get();
+
+		foreach ($userNotifications as $userNotification) {
+			$notifiable = $userNotification->notifiable;
+
+			if ($notifiable instanceof Comment) {
+				$userNotification->notifiable->load('user');
+			}
+		}
+
+		return $this->success([
+			'notifications' => NotificationResource::collection($userNotifications),
+			'message'       => 'Notification succesfully updated',
+		]);
+	}
+
 	public function markAllRead(): JsonResponse
 	{
 		// make every notification's is_active column false

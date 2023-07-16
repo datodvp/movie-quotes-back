@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuoteRequest;
+use App\Http\Requests\UpdateQuoteRequest;
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use App\Traits\HttpResponses;
@@ -34,6 +35,14 @@ class QuoteController extends Controller
 		]);
 	}
 
+	public function show(Quote $quote): JsonResponse
+	{
+		$quote->load('comments.user', 'likes', 'user', 'movie');
+		return $this->success([
+			'quote' => new QuoteResource($quote),
+		]);
+	}
+
 	public function store(StoreQuoteRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
@@ -47,6 +56,31 @@ class QuoteController extends Controller
 		return $this->success([
 			'message' => 'movie added succesfully',
 			'quote'   => new QuoteResource($quote),
+		]);
+	}
+
+	public function update(UpdateQuoteRequest $request, Quote $quote): JsonResponse
+	{
+		$this->authorize('interact', $quote);
+
+		$validated = $request->validated();
+
+		$quote->update($validated);
+
+		if (isset($validated['image'])) {
+			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+			$quote->update([
+				'image' => $validated['image'],
+			]);
+		}
+
+		$quote->save();
+
+		$quote->load('comments.user', 'likes');
+
+		return $this->success([
+			'message' => 'Movie has been changed!',
+			'movie'   => new QuoteResource($quote),
 		]);
 	}
 
