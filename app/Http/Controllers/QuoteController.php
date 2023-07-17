@@ -65,16 +65,11 @@ class QuoteController extends Controller
 
 		$validated = $request->validated();
 
-		$quote->update($validated);
-
 		if (isset($validated['image'])) {
 			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
-			$quote->update([
-				'image' => $validated['image'],
-			]);
 		}
 
-		$quote->save();
+		$quote->update($validated);
 
 		$quote->load('comments.user', 'likes');
 
