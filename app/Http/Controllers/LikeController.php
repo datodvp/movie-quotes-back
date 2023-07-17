@@ -35,7 +35,7 @@ class LikeController extends Controller
 			]);
 			$notification['created_ago'] = $notification->created_at->diffForHumans();
 
-			NotificationAdded::dispatch($notification->load('notifiable'));
+			NotificationAdded::dispatch($notification->load('notifiable', 'quote'));
 		}
 
 		$like = $user->likedQuotes()->find($validated['quote_id']);
