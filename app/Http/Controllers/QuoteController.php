@@ -47,7 +47,7 @@ class QuoteController extends Controller
 	{
 		$validated = $request->validated();
 
-		$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+		$validated['image'] = url('storage/' . request()->file('image')->store('images', 'public'));
 
 		$quote = Quote::create($validated);
 
@@ -66,7 +66,7 @@ class QuoteController extends Controller
 		$validated = $request->validated();
 
 		if (isset($validated['image'])) {
-			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+			$validated['image'] = url('storage/' . request()->file('image')->store('images', 'public'));
 		}
 
 		$quote->update($validated);

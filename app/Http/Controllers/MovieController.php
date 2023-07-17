@@ -33,7 +33,7 @@ class MovieController extends Controller
 	{
 		$validated = $request->validated();
 
-		$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+		$validated['image'] = url('storage/' . request()->file('image')->store('images', 'public'));
 
 		$movie = Movie::create($validated);
 
@@ -65,21 +65,16 @@ class MovieController extends Controller
 
 		$validated = $request->validated();
 
-		$movie->update($validated);
-
 		// first detach genres to reSet them
 		$movie->genres()->detach();
 
 		$movie->genres()->attach($validated['genres']);
 
 		if (isset($validated['image'])) {
-			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
-			$movie->update([
-				'image' => $validated['image'],
-			]);
+			$validated['image'] = url('storage/' . request()->file('image')->store('images', 'public'));
 		}
 
-		$movie->save();
+		$movie->update($validated);
 
 		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
 
