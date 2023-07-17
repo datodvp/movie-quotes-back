@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 		});
 	});
 
-	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.index');
+	Route::get('/movie-genres', [GenreController::class, 'index'])->name('movies.genres');
 
 	Route::prefix('quotes')->group(function () {
 		Route::controller(QuoteController::class)->group(function () {
