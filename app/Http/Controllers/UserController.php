@@ -32,7 +32,7 @@ class UserController extends Controller
 		}
 
 		if (isset($validated['image'])) {
-			$validated['image'] = 'storage/' . request()->file('image')->store('images', 'public');
+			$validated['image'] = url('storage/' . request()->file('image')->store('images', 'public'));
 			$user->image = $validated['image'];
 		}
 
