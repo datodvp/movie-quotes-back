@@ -28,7 +28,7 @@ class UserController extends Controller
 		if (isset($validated['email'])) {
 			$user->email = $validated['email'];
 			$user->email_verified_at = null;
-			Mail::to($user)->queue(new VerifyEmail($user));
+			Mail::to($user)->send(new VerifyEmail($user));
 		}
 
 		if (isset($validated['image'])) {
