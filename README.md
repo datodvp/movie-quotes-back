@@ -89,8 +89,6 @@ You can run Laravel's built-in development server by executing:
 
 ### DrawSQL
 
-Also, Check out tables for MovieQuotes app.
-
-https://drawsql.app/teams/redberry-19/diagrams/moviequotes-chad
+Also, Check out tables for Movie Quotes app.
 
 <img src="readme/drawsql.png" alt="drawSQL" width="600" style="margin-right: 20px" />
