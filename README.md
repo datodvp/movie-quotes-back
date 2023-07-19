@@ -37,7 +37,7 @@ Movie Quotes is a social network app where people can post quotes from movies an
 
 ### Getting Started
 
-1\. First of all you need to clone Coronatime repository from github:
+1\. First of all you need to clone repository from github:
 
 ```sh
 git clone https://github.com/RedberryInternship/davit-gagua-epic-movie-quotes-back.git
