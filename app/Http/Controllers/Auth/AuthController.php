@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\Auth\LoginUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
 use App\Mail\VerifyEmail;
 use App\Models\User;
 use App\Traits\HttpResponses;

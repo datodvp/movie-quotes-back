@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Quote;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckEmailRequest extends FormRequest
+class UpdateQuoteRequest extends FormRequest
 {
 	/**
 	 * Get the validation rules that apply to the request.
@@ -14,7 +14,9 @@ class CheckEmailRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'email' => ['required', 'email'],
+			'text.en'   => ['required', 'min:3', 'max:255'],
+			'text.ka'   => ['required', 'min:3', 'max:255'],
+			'image'     => ['sometimes', 'image'],
 		];
 	}
 }

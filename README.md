@@ -22,14 +22,14 @@ Movie Quotes is a social network app where people can post quotes from movies an
 ### Prerequisites
 
 -   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/2560px-PHP-logo.svg.png" width="35" style="position: relative; top: 4px" /> *PHP@8.2 and up*
--   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/2560px-Npm-logo.svg.png" width="35" style="position: relative; top: 4px" /> _npm@9 and up_
--   <img src="https://cdn.freebiesupply.com/logos/large/2x/composer-logo-png-transparent.png" width="35" style="position: relative; top: 6px" /> _composer@2 and up_
+-   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/2560px-Npm-logo.svg.png" width="35" style="position: relative; top: 4px" /> _npm@9.4 and up\_
+-   <img src="https://cdn.freebiesupply.com/logos/large/2x/composer-logo-png-transparent.png" width="35" style="position: relative; top: 6px" /> _composer@2.5 and up\_
 
 #
 
 ### Tech Stack
 
--   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Laravel.svg/985px-Laravel.svg.png" height="18" style="position: relative; top: 4px" /> [Laravel@8.x](https://laravel.com/docs/8.x)
+-   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Laravel.svg/985px-Laravel.svg.png" height="18" style="position: relative; top: 4px" /> [Laravel@10.x](https://laravel.com/docs/10.x)
 -   <img src="https://avatars.githubusercontent.com/u/7535935?s=280&v=4" height="19" style="position: relative; top: 4px" /> [Spatie Translatable](https://github.com/spatie/laravel-translatable)
 -   <img src="https://laracasts.nyc3.cdn.digitaloceanspaces.com/series/thumbnails/get-real-with-laravel-echo.png" height="19" style="position: relative; top: 4px" /> [Laravel Echo](https://github.com/laravel/echo)
 

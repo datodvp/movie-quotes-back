@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CheckEmailRequest;
-use App\Http\Requests\PasswordResetRequest;
+use App\Http\Requests\Auth\CheckEmailRequest;
+use App\Http\Requests\User\PasswordResetRequest;
 use App\Mail\PasswordReset as MailPasswordReset;
 use App\Models\User;
 use App\Traits\HttpResponses;
@@ -43,7 +43,7 @@ class PasswordResetController extends Controller
 
 	public function redirect($token, Request $request): RedirectResponse
 	{
-		$email = $request->query('email');
+		$email = $request->email;
 
 		$resetPasswordUrl = env('FRONTEND_URL') . '/reset-password' . '?token=' . $token . '&email=' . $email;
 

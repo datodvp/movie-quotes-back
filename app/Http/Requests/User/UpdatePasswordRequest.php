@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PasswordResetRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
 	/**
 	 * Get the validation rules that apply to the request.
@@ -16,7 +16,7 @@ class PasswordResetRequest extends FormRequest
 		return [
 			'token'    => ['required'],
 			'email'    => ['required', 'email'],
-			'password' => ['required', 'min:8', 'max:15', 'confirmed'],
+			'password' => ['required', 'min:8', 'max:15', 'confirmed', 'regex:/^[a-z0-9]*$/'],
 		];
 	}
 }

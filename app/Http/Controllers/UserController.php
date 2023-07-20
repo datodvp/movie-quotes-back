@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Mail\VerifyEmail;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -37,7 +37,6 @@ class UserController extends Controller
 		}
 
 		$user->update($validated);
-		$user->save();
 
 		return $this->success([
 			'message' => __('messages.profile_updated'),

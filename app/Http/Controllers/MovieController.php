@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMovieRequest;
-use App\Http\Requests\UpdateMovieRequest;
+use App\Http\Requests\Movie\StoreMovieRequest;
+use App\Http\Requests\Movie\UpdateMovieRequest;
 use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use App\Traits\HttpResponses;
@@ -15,14 +15,11 @@ class MovieController extends Controller
 
 	public function index(): JsonResponse
 	{
-		// get only movies created by authorized user
-		$movies = Movie::where('user_id', auth()->user()->id)->get();
+		$movies = Movie::where('user_id', auth()->id())->get();
 
 		if ($search = request()->query('search')) {
 			$movies = Movie::filter($search)->get();
 		}
-
-		// $movies->load('quotes');
 
 		return $this->success([
 			'movies' => MovieResource::collection($movies),
@@ -37,7 +34,6 @@ class MovieController extends Controller
 
 		$movie = Movie::create($validated);
 
-		// attach genres to movie
 		$movie->genres()->sync($validated['genres']);
 
 		$movie->load('quotes.comments.user', 'quotes.likes', 'genres');
@@ -65,7 +61,6 @@ class MovieController extends Controller
 
 		$validated = $request->validated();
 
-		// first detach genres to reSet them
 		$movie->genres()->detach();
 
 		$movie->genres()->attach($validated['genres']);
@@ -86,7 +81,6 @@ class MovieController extends Controller
 
 	public function destroy(Movie $movie): JsonResponse
 	{
-		// check if delete request if from author of the movie
 		$this->authorize('interact', $movie);
 
 		$movie->delete();
