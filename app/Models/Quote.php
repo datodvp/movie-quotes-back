@@ -39,18 +39,20 @@ class Quote extends Model
 
 	public function scopeFilter($query, $search)
 	{
-		if ($search[0] === '#') {
-			$trimmedSearch = ltrim($search, '#');
-			$query->whereRaw("json_extract(text, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
-					->orWhereRaw("json_extract(text, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
-		}
+		if ($search) {
+			if ($search[0] === '#') {
+				$trimmedSearch = ltrim($search, '#');
+				$query->whereRaw("json_extract(text, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
+						->orWhereRaw("json_extract(text, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
+			}
 
-		if ($search[0] === '@') {
-			$trimmedSearch = ltrim($search, '@');
-			$query->whereHas('movie', function ($query) use ($trimmedSearch) {
-				$query->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
-				->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
-			});
+			if ($search[0] === '@') {
+				$trimmedSearch = ltrim($search, '@');
+				$query->whereHas('movie', function ($query) use ($trimmedSearch) {
+					$query->whereRaw("json_extract(name, '$.ka') LIKE ?", ["%{$trimmedSearch}%"])
+					->orWhereRaw("json_extract(name, '$.en') LIKE ?", ["%{$trimmedSearch}%"]);
+				});
+			}
 		}
 	}
 }

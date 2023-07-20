@@ -12,13 +12,13 @@ class EmailVerificationController extends Controller
 {
 	use HttpResponses;
 
-	public function verify($user_id, Request $request): RedirectResponse
+	public function verify(int $userId, Request $request): RedirectResponse
 	{
 		if (!$request->hasValidSignature()) {
 			return  $this->respondUnauthorizedRequest(253);
 		}
 
-		$user = User::findOrFail($user_id);
+		$user = User::findOrFail($userId);
 
 		if (!$user->hasVerifiedEmail()) {
 			$user->markEmailAsVerified();

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreQuoteRequest;
-use App\Http\Requests\UpdateQuoteRequest;
+use App\Http\Requests\Quote\StoreQuoteRequest;
+use App\Http\Requests\Quote\UpdateQuoteRequest;
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use App\Traits\HttpResponses;
@@ -15,20 +15,12 @@ class QuoteController extends Controller
 
 	public function index(): JsonResponse
 	{
-		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
-					->orderByDesc('created_at')
-					->simplePaginate(2);
-
 		$search = urldecode(request()->query('search'));
 
-		if ($search) {
-			$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])->filter($search)->get();
-
-			// if there is no tag just send empty array
-			if ($search[0] !== '@' && $search[0] !== '#') {
-				$quotes = [];
-			}
-		}
+		$quotes = Quote::with(['user', 'movie',  'comments.user', 'likes'])
+					->filter($search)
+					->orderByDesc('created_at')
+					->simplePaginate(5);
 
 		return $this->success([
 			'quotes' => QuoteResource::collection($quotes),
@@ -82,10 +74,6 @@ class QuoteController extends Controller
 	public function destroy(Quote $quote): JsonResponse
 	{
 		$this->authorize('interact', $quote);
-
-		if ($quote->user_id !== auth()->user()->id) {
-			return $this->error('', 403, 'Your dont have permission for that!');
-		}
 
 		$quote->delete();
 

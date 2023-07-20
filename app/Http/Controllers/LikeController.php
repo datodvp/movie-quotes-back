@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NotificationAdded;
 use App\Events\QuoteLikeAction;
 use App\Events\QuoteUnlikeAction;
-use App\Http\Requests\StoreQuoteLikeRequest;
+use App\Http\Requests\Quote\StoreQuoteLikeRequest;
 use App\Models\Quote;
 use App\Traits\HttpResponses;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +24,6 @@ class LikeController extends Controller
 
 		$quote = Quote::with(['user', 'movie',  'comments.user', 'likes'])->find($validated['quote_id']);
 
-		// if quote is liked by NON-Author of it, SEND notification
 		if ($user->id !== $quote->user->id) {
 			$notification = $user->likeNotifiable()->create([
 				'user_id'   => $quote->user->id,
@@ -40,7 +39,6 @@ class LikeController extends Controller
 
 		$like = $user->likedQuotes()->find($validated['quote_id']);
 
-		// broadcast for other users
 		QuoteLikeAction::dispatch($like);
 
 		return $this->success([
@@ -55,16 +53,12 @@ class LikeController extends Controller
 
 		$user = auth()->user();
 
-		// get removed like
 		$like = $user->likedQuotes()->find($validated['quote_id']);
 
-		// detach like
 		$user->likedQuotes()->detach($like);
 
-		// remove notification for it
 		$user->likeNotifiable()->delete();
 
-		// broadcast for other users
 		QuoteUnlikeAction::dispatch($like);
 
 		return $this->success([
